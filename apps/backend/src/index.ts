@@ -1,8 +1,16 @@
 import express from "express";
 import { pool } from "./db";
+import cors from "cors";
 
 const app = express();
 const port = 3000;
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -12,22 +20,25 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
 
-app.get("v1/users", async (req, res) => {
-  const updated_after =
-    typeof req.query.updated_after === "string"
-      ? new Date(req.query.updated_after)
+app.get("/v1/notes", async (req, res) => {
+  console.log(req.query.updatedAfter);
+  const updatedAfter =
+    typeof req.query.updatedAfter === "string"
+      ? new Date(Number(req.query.updatedAfter))
       : undefined;
-  console.log(updated_after);
+  const serverTime = Date.now();
   try {
-    if (updated_after && !isNaN(updated_after.getTime())) {
-      const [rows] = await pool.query(
+    if (updatedAfter && !isNaN(updatedAfter.getTime())) {
+      const [data] = await pool.query(
         "SELECT * FROM notes WHERE updated_at > ?",
-        [updated_after],
+        [updatedAfter],
       );
-      res.json(rows);
+      console.log({ serverTime, data });
+      res.json({ serverTime, data });
     } else {
-      const [rows] = await pool.query("SELECT * FROM notes");
-      res.json(rows);
+      const [data] = await pool.query("SELECT * FROM notes");
+      console.log({ serverTime, data });
+      res.json({ serverTime, data });
     }
   } catch (err) {
     console.error(err);
