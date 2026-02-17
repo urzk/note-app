@@ -1,14 +1,15 @@
 import useSWR, { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
+import type { Note, NotesApi } from "@shared/types/note";
 
-const fetcher = (url) =>
-  fetch("http://localhost:3000" + url).then((res) => res.json());
+const fetcher = (key: string) =>
+  fetch("http://localhost:3000" + key).then((res) => res.json());
 export const useFetchedServerNotesData = () =>
-  useSWRImmutable("/v1/notes", fetcher);
+  useSWRImmutable<NotesApi>("/v1/notes", fetcher);
 
-const mergeNotes = (currentData, updatedData) => {
-  const currentNotes = currentData.data;
-  const updatedNotes = updatedData.data;
+const mergeNotes = (currentData: NotesApi, updatedData: NotesApi): NotesApi => {
+  const currentNotes = currentData.notes;
+  const updatedNotes = updatedData.notes;
   const newServerTime = updatedData.serverTime;
   /* データ制約
     currentNotes, updatedNotes 共にid順に整列された0以上の配列
@@ -19,11 +20,11 @@ const mergeNotes = (currentData, updatedData) => {
   if (currentNotes.length == 0) {
     return updatedData;
   } else if (updatedNotes.length == 0) {
-    return { serverTime: newServerTime, data: currentNotes };
+    return { serverTime: newServerTime, notes: currentNotes };
   }
   let ci = 0; // currentNotesIndex
   let ui = 0; // updatedNotesIndex
-  const newNotes = []; //type Note[]
+  const newNotes: Note[] = [];
   while (true) {
     const cid = currentNotes[ci].id;
     const uid = updatedNotes[ui].id;
@@ -52,7 +53,7 @@ const mergeNotes = (currentData, updatedData) => {
       break;
     }
   }
-  return { serverTime: newServerTime, data: newNotes };
+  return { serverTime: newServerTime, notes: newNotes };
 };
 
 export const useFetchNotesData = () => {
