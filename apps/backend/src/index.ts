@@ -1,8 +1,19 @@
 import express from "express";
-import { Request, Response } from "express";
-import { pool } from "./db";
+import type { Request, Response } from "express";
+import { pool } from "./db.js";
 import cors from "cors";
-import type { Note, NoteDB, NotesApi } from "@shared/types/note";
+import type { Note, NotesApi } from "@shared/types/note.js";
+import type { RowDataPacket } from "mysql2";
+
+export interface NoteDB extends RowDataPacket {
+  id: number;
+  user_id: number | null; // TODO:
+  title: string;
+  content: string;
+  created_at: Date;
+  updated_at: Date;
+  is_deleted: number;
+}
 
 const app = express();
 const port = 3000;
@@ -26,7 +37,7 @@ app.get(
   "/v1/notes",
   async (
     req: Request<any, any, any, { updatedAfter?: string }>,
-    res: Response<NotesApi>,
+    res: Response<NotesApi | { err: unknown }>,
   ) => {
     console.log(req.query.updatedAfter);
     const updatedAfter =
@@ -56,7 +67,7 @@ app.get(
           content,
           createdAt: created_at,
           updatedAt: updated_at,
-          isDeleted: is_deleted,
+          isDeleted: is_deleted == 1,
         }),
       );
       const notesApiResponse: NotesApi = { serverTime, notes };

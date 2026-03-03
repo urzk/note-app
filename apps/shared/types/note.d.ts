@@ -8,16 +8,6 @@ export type Note = {
   isDeleted: boolean;
 };
 
-export type NoteDB = {
-  id: number;
-  user_id: number | null; // TODO:
-  title: string;
-  content: string;
-  created_at: Date;
-  updated_at: Date;
-  is_deleted: boolean;
-};
-
 export type NotesApi = {
   serverTime: number;
   notes: Note[];
