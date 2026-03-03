@@ -7,8 +7,18 @@ function App() {
   const { data } = useFetchedServerNotesData();
   useFetchNotesData();
   useEffect(() => console.log(data));
-
-  return <div className="text-3xl font-bold underline">にゃーん</div>;
+  if (data) {
+    return (
+      <div className="flex size-max">
+        <div className="w-3xs">
+          {data.notes.map((note) => (
+            <div key={note.id}>{note.title}</div>
+          ))}
+        </div>
+        <div className="grow">にゃーん</div>
+      </div>
+    );
+  }
 }
 
 export default App;
