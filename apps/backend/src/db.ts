@@ -2,11 +2,19 @@ import mysql from "mysql2/promise";
 import dotenv from "dotenv";
 dotenv.config();
 
+const requiredEnv = (name: string): string => {
+  const value = process.env[name];
+  if (!value) {
+    return "";
+  }
+  return value;
+};
+
 export const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  host: requiredEnv("DB_HOST"),
+  port: Number(requiredEnv("DB_PORT")),
+  user: requiredEnv("DB_USER"),
+  password: requiredEnv("DB_PASSWORD"),
+  database: requiredEnv("DB_NAME"),
   connectionLimit: 10,
 });
