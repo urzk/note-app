@@ -9,7 +9,7 @@ function App() {
   useEffect(() => console.log(data));
   if (data) {
     return (
-      <div className="flex size-max">
+      <div className="flex">
         <div className="w-3xs">
           {data.notes.map((note) => (
             <div key={note.id}>{note.title}</div>
