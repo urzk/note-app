@@ -14,7 +14,8 @@ function App() {
   if (data) {
     return (
       <div className="flex h-screen overflow-hidden">
-        <div className="w-3xs flex flex-col">
+        <div className="flex flex-col w-3xs">
+          <div className="bg-gray-800 h-8 text-center">header</div>
           <ul className="flex-1 overflow-y-auto">
             {data.notes.map((note) => (
               <NoteListItem
