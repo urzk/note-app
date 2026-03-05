@@ -65,8 +65,8 @@ app.get(
           userId: user_id,
           title,
           content,
-          createdAt: created_at,
-          updatedAt: updated_at,
+          createdAt: created_at.getTime(),
+          updatedAt: updated_at.getTime(),
           isDeleted: is_deleted == 1,
         }),
       );

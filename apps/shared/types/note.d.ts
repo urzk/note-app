@@ -3,8 +3,8 @@ export type Note = {
   userId: number | null; // TODO:
   title: string;
   content: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: number;
+  updatedAt: number;
   isDeleted: boolean;
 };
 
