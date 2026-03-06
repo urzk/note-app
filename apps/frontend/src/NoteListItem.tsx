@@ -1,22 +1,38 @@
-export const NoteListItem = ({
-  id,
-  title,
-  updatedAt,
-}: {
-  id: number;
-  title: string;
-  updatedAt: Date;
-}) => {
-  return (
-    <li className="px-3" key={id}>
-      <div className="px-3 py-1 rounded-md hover:bg-zinc-800 hover:shadow-lg">
-        <div>
-          <h2>{title}</h2>
+import { memo, useMemo } from "react";
+import { getDateOrTime } from "@shared/utils/datetime";
+import useSWR from "swr";
+
+export const NoteListItem = memo(
+  ({
+    id,
+    title,
+    selected,
+    updatedAt,
+  }: {
+    id: number;
+    title: string;
+    selected: boolean;
+    updatedAt: number;
+  }) => {
+    const { mutate } = useSWR<number>("selected-note-id", null);
+    const dateOtTime = useMemo(() => getDateOrTime(updatedAt), [updatedAt]); // TODO: 日付変更時の更新
+
+    return (
+      <li className="px-3">
+        <div
+          className={
+            "px-3 py-1 rounded-md" + (selected && " bg-zinc-800 shadow-lg")
+          }
+          onClick={() => mutate(id)}
+        >
+          <div>
+            <h2>{title}</h2>
+          </div>
+          <div>
+            <small>{dateOtTime}</small>
+          </div>
         </div>
-        <div>
-          <small>2026/03/04</small>
-        </div>
-      </div>
-    </li>
-  );
-};
+      </li>
+    );
+  },
+);
