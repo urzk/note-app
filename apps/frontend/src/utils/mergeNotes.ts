@@ -1,13 +1,9 @@
-import useSWR, { mutate } from "swr";
-import useSWRImmutable from "swr/immutable";
 import type { Note, NotesApi } from "@shared/types/note";
 
-const fetcher = (key: string) =>
-  fetch("http://localhost:3000" + key).then((res) => res.json());
-export const useFetchedServerNotesData = () =>
-  useSWRImmutable<NotesApi>("/v1/notes", fetcher);
-
-const mergeNotes = (currentData: NotesApi, updatedData: NotesApi): NotesApi => {
+export const mergeNotes = (
+  currentData: NotesApi,
+  updatedData: NotesApi,
+): NotesApi => {
   const currentNotes = currentData.notes;
   const updatedNotes = updatedData.notes;
   const newServerTime = updatedData.serverTime;
@@ -54,31 +50,4 @@ const mergeNotes = (currentData: NotesApi, updatedData: NotesApi): NotesApi => {
     }
   }
   return { serverTime: newServerTime, notes: newNotes };
-};
-
-export const useFetchNotesData = () => {
-  const updatedAfter = useFetchedServerNotesData().data?.serverTime; //TODO: string->Date
-  const fetchAll = !updatedAfter;
-  console.log(updatedAfter);
-  useSWR(
-    "/v1/notes/updates",
-    () =>
-      fetcher(
-        updatedAfter ? `/v1/notes?updatedAfter=${updatedAfter}` : "/v1/notes",
-      ),
-    {
-      refreshInterval: 3_000, // 3秒ごとに再取得
-      onSuccess: (updatedData) => {
-        if (!fetchAll) {
-          mutate(
-            "/v1/notes",
-            (currentData = []) => {
-              return mergeNotes(currentData, updatedData);
-            }, // TODO: localStorageに保存
-            { revalidate: false },
-          );
-        }
-      },
-    },
-  );
 };
