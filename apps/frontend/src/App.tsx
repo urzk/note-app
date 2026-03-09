@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./style.css";
 
-import { useFetchedServerNotesData, useFetchNotesData } from "./hooks/fetch";
+import { useSyncedNotesData, useFetchNotesData } from "./hooks/fetch";
 import MDEditor from "@uiw/react-md-editor";
 import useSWR from "swr";
 
@@ -9,7 +9,7 @@ import { NoteListItem } from "./NoteListItem";
 
 function App() {
   const { data: selectedNoteId } = useSWR<number>("selected-note-id", null);
-  const { data } = useFetchedServerNotesData();
+  const { data } = useSyncedNotesData();
   useFetchNotesData();
   useEffect(() => console.log(data));
   const [value, setValue] = useState<string | undefined>("");
