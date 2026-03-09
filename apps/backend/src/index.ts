@@ -46,10 +46,11 @@ app.get(
         : undefined;
     const serverTime = Date.now();
     try {
-      let query = "SELECT * FROM notes";
+      let query = "SELECT * FROM notes WHERE user_id IS NULL";
       if (updatedAfter && !isNaN(updatedAfter.getTime())) {
-        query += " WHERE updated_at > ?";
+        query += " AND updated_at > ?";
       }
+      query += " ORDER BY updated_at DESC";
       const [notesDB] = await pool.query<NoteDB[]>(query, [updatedAfter]);
       const notes: Note[] = notesDB.map(
         ({
