@@ -8,11 +8,13 @@ export const NoteListItem = memo(
     title,
     selected,
     updatedAt,
+    isSynced,
   }: {
     id: number;
     title: string;
     selected: boolean;
     updatedAt: number;
+    isSynced: boolean;
   }) => {
     const { mutate } = useSWR<number>("selected-note-id", null);
     const dateOtTime = useMemo(() => getDateOrTime(updatedAt), [updatedAt]); // TODO: 日付変更時の更新
@@ -28,8 +30,12 @@ export const NoteListItem = memo(
           <div>
             <h2>{title}</h2>
           </div>
-          <div>
-            <small>{dateOtTime}</small>
+          <div className="flex items-end justify-between">
+            <small>
+              {isSynced && "[Synced]"}
+              {dateOtTime}
+            </small>
+            <small>タグ</small>
           </div>
         </div>
       </li>

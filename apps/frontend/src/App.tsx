@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import "./style.css";
 
 import { useSyncNotesData } from "./hooks/useSyncNotesData";
@@ -6,32 +6,64 @@ import MDEditor from "@uiw/react-md-editor";
 import useSWR from "swr";
 
 import { NoteListItem } from "./NoteListItem";
+import { useNote } from "./hooks/useNote";
+import type { Note } from "@shared/types/note";
 
 function App() {
   const { data: selectedNoteId } = useSWR<number>("selected-note-id", null);
+  const { data: notesUpdated } = useSWR<Note[]>("notes-updated", null);
   const { data: notesSynced } = useSyncNotesData("notes-synced");
+  const updatedIds = new Set(
+    notesUpdated ? notesUpdated.map((note) => note.id) : [],
+  );
   useEffect(() => console.log(notesSynced));
-  const [value, setValue] = useState<string | undefined>("");
+  const { note, setNote } = useNote(selectedNoteId);
 
   return (
     <div className="flex h-screen overflow-hidden">
       <div className="flex flex-col w-3xs">
         <div className="bg-gray-800 h-8 text-center">header</div>
         <ul className="flex-1 overflow-y-auto py-3">
-          {notesSynced &&
-            notesSynced.notes.map((note) => (
+          {notesUpdated &&
+            notesUpdated.map((note) => (
               <NoteListItem
                 id={note.id}
+                isSynced={false}
                 selected={note.id === selectedNoteId}
                 title={note.title}
                 updatedAt={note.updatedAt}
                 key={note.id}
               />
             ))}
+          {notesSynced &&
+            notesSynced.notes.map(
+              (note) =>
+                !updatedIds.has(note.id) && (
+                  <NoteListItem
+                    id={note.id}
+                    isSynced={true}
+                    selected={note.id === selectedNoteId}
+                    title={note.title}
+                    updatedAt={note.updatedAt}
+                    key={note.id}
+                  />
+                ),
+            )}
         </ul>
       </div>
       <div className="grow">
-        <MDEditor height={500} value={value} onChange={setValue} />
+        <MDEditor
+          height={500}
+          value={note?.content}
+          onChange={(content) =>
+            setNote({
+              id: note?.id,
+              title: note?.title,
+              updatedAt: note?.updatedAt,
+              content,
+            })
+          }
+        />
         {/* TODO: markdownパース処理をWeb Workerにやらせる */}
       </div>
     </div>
