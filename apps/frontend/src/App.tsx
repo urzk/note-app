@@ -8,6 +8,7 @@ import useSWR from "swr";
 import { NoteListItem } from "./NoteListItem";
 import { useNote } from "./hooks/useNote";
 import type { Note } from "@shared/types/note";
+import { Editor } from "./Editor";
 
 function App() {
   const { data: selectedNoteId } = useSWR<number>("selected-note-id", null);
@@ -21,7 +22,7 @@ function App() {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <div className="flex flex-col w-3xs">
+      <div className="flex flex-col w-3xs border-r border-zinc-800">
         <div className="bg-gray-800 h-8 text-center">header</div>
         <ul className="flex-1 overflow-y-auto py-3">
           {notesUpdated &&
@@ -51,19 +52,22 @@ function App() {
             )}
         </ul>
       </div>
-      <div className="grow">
-        <MDEditor
-          height={500}
-          value={note?.content}
-          onChange={(content) =>
-            setNote({
-              id: note?.id,
-              title: note?.title,
-              updatedAt: note?.updatedAt,
-              content,
-            })
-          }
-        />
+      <div className="flex flex-col grow">
+        {/*
+          <MDEditor
+            height={500}
+            value={note?.content}
+            onChange={(content) =>
+              setNote({
+                id: note?.id,
+                title: note?.title,
+                updatedAt: note?.updatedAt,
+                content,
+              })
+            }
+          />
+        */}
+        <Editor />
         {/* TODO: markdownパース処理をWeb Workerにやらせる */}
       </div>
     </div>
