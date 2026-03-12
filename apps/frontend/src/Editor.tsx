@@ -9,6 +9,7 @@ import {
 } from "@uiw/react-md-editor";
 
 import { useNote } from "./hooks/useNote";
+import { getTitle } from "./utils/getTitle";
 
 export const Editor = () => {
   const { data: selectedNoteId } = useSWR<number>("selected-note-id", null);
@@ -55,14 +56,15 @@ export const Editor = () => {
           className="w-1/2 p-4 overflow-auto resize-none outline-0"
           ref={textareaRef}
           value={note?.content ?? ""}
-          onChange={(e) =>
-            setNote({
+          onChange={(e) => {
+            const content = e.target.value;
+            return setNote({
               id: note?.id,
-              title: note?.title,
+              title: getTitle(content),
+              content,
               updatedAt: Date.now(),
-              content: e.target.value,
-            })
-          }
+            });
+          }}
           onKeyDown={onKeyDown}
         />
         <div className="w-1/2 border-l border-zinc-800">ねこ</div>

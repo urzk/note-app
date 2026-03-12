@@ -1,6 +1,7 @@
 import { memo, useMemo } from "react";
-import { getDateOrTime } from "@shared/utils/datetime";
 import useSWR from "swr";
+
+import { getDateOrTime } from "@shared/utils/datetime";
 
 export const NoteListItem = memo(
   ({
@@ -17,7 +18,7 @@ export const NoteListItem = memo(
     isSynced: boolean;
   }) => {
     const { mutate } = useSWR<number>("selected-note-id", null);
-    const dateOtTime = useMemo(() => getDateOrTime(updatedAt), [updatedAt]); // TODO: 日付変更時の更新
+    const dateOrTime = useMemo(() => getDateOrTime(updatedAt), [updatedAt]); // TODO: 日付変更時の更新
 
     return (
       <li className="px-3">
@@ -28,12 +29,12 @@ export const NoteListItem = memo(
           onClick={() => mutate(id)}
         >
           <div>
-            <h2>{title}</h2>
+            <h2>{!title ? "無題" : title}</h2>
           </div>
           <div className="flex items-end justify-between">
             <small>
               {isSynced && "[Synced]"}
-              {dateOtTime}
+              {dateOrTime}
             </small>
             <small>タグ</small>
           </div>
