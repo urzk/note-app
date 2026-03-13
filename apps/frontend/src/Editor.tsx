@@ -48,13 +48,15 @@ export const Editor = () => {
           value={note?.content ?? ""}
           onChange={(e) => {
             const content = e.target.value;
-            setNote({
-              id: note?.id,
-              title: getTitle(content),
-              content,
-              updatedAt: Date.now(),
-              isDeleted: false,
-            });
+            if (note) {
+              setNote({
+                id: note.id,
+                title: getTitle(content),
+                content,
+                updatedAt: Date.now(),
+                isDeleted: false,
+              });
+            }
           }}
           onKeyDown={onKeyDown}
         />
