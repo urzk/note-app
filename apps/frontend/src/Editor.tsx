@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
+import type { KeyboardEvent } from "react";
 import useSWR from "swr";
 
 import {
@@ -10,6 +11,7 @@ import {
 
 import { useNote } from "./hooks/useNote";
 import { getTitle } from "./utils/getTitle";
+import { Toolbar } from "./Toolbar";
 
 export const Editor = () => {
   const { data: selectedNoteId } = useSWR<number>("selected-note-id", null);
@@ -27,7 +29,7 @@ export const Editor = () => {
     }
   }, []);
 
-  const onKeyDown = (e) => {
+  const onKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     handleKeyDown(e, 2, false);
     if (orchestratorRef.current) {
       shortcuts(e, commands, orchestratorRef.current);
@@ -37,32 +39,7 @@ export const Editor = () => {
   return (
     <div className="flex flex-col grow">
       <div className="border-b border-zinc-800 flex justify-between">
-        <ul className="flex items-center px-1 py-0.5">
-          {commands.map((command, idx) => {
-            if (command.keyCommand === "divider") {
-              return (
-                <li key={idx} className="w-1 text-center">
-                  |
-                </li>
-              );
-            }
-            return (
-              <li key={idx} className="hover:bg-zinc-800">
-                <button
-                  className="p-1"
-                  {...command.buttonProps}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    orchestratorRef.current?.executeCommand(command);
-                  }}
-                >
-                  {command.icon}
-                </button>
-                {Array.isArray(command.children)}
-              </li>
-            );
-          })}
-        </ul>
+        <Toolbar commands={commands} orchestratorRef={orchestratorRef} />
       </div>
       <div className="flex w-full h-screen overflow-auto">
         <textarea
@@ -71,11 +48,12 @@ export const Editor = () => {
           value={note?.content ?? ""}
           onChange={(e) => {
             const content = e.target.value;
-            return setNote({
+            setNote({
               id: note?.id,
               title: getTitle(content),
               content,
               updatedAt: Date.now(),
+              isDeleted: false,
             });
           }}
           onKeyDown={onKeyDown}
