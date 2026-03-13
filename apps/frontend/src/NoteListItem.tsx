@@ -24,12 +24,12 @@ export const NoteListItem = memo(
       <li className="px-3">
         <div
           className={
-            "px-3 py-1 rounded-md" + (selected && " bg-zinc-800 shadow-lg")
+            "px-3 py-1 rounded-md" + (selected ? " bg-zinc-800 shadow-lg" : "")
           }
           onClick={() => mutate(id)}
         >
           <div>
-            <h2>{!title ? "無題" : title}</h2>
+            <h2 className="line-clamp-1">{!title ? "無題" : title}</h2>
           </div>
           <div className="flex items-end justify-between">
             <small>
