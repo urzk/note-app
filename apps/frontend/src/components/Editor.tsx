@@ -2,7 +2,7 @@ import { useMemo, useRef } from "react";
 
 import { TextAreaCommandOrchestrator, getCommands } from "@uiw/react-md-editor";
 
-import { EditorTextArea } from "./EditorTextarea";
+import { EditorTextArea } from "./EditorTextArea";
 import { Toolbar } from "./Toolbar";
 
 export const Editor = () => {

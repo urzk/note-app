@@ -9,8 +9,8 @@ import {
 } from "@uiw/react-md-editor";
 import type { ICommand } from "@uiw/react-md-editor";
 
-import { useNote } from "./hooks/useNote";
-import { getTitle } from "./utils/getTitle";
+import { useNote } from "../hooks/useNote";
+import { getTitle } from "../utils/getTitle";
 
 export const EditorTextArea = ({
   commands,

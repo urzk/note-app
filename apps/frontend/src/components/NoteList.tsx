@@ -1,7 +1,7 @@
 import useSWR from "swr";
 
 import type { Note } from "@shared/types/note";
-import { useSyncNotesData } from "./hooks/useSyncNotesData";
+import { useSyncNotesData } from "../hooks/useSyncNotesData";
 
 import { NoteListItem } from "./NoteListItem";
 

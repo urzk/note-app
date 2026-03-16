@@ -1,7 +1,7 @@
 import "./style.css";
 
-import { Editor } from "./Editor";
-import { NoteList } from "./NoteList";
+import { Editor } from "./components/Editor";
+import { NoteList } from "./components/NoteList";
 
 function App() {
   return (
