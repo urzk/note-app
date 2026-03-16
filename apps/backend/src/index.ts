@@ -53,20 +53,10 @@ app.get(
       query += " ORDER BY updated_at DESC";
       const [notesDB] = await pool.query<NoteDB[]>(query, [updatedAfter]);
       const notes: Note[] = notesDB.map(
-        ({
+        ({ id, title, content, updated_at, is_deleted }) => ({
           id,
-          user_id,
           title,
           content,
-          created_at,
-          updated_at,
-          is_deleted,
-        }) => ({
-          id,
-          userId: user_id,
-          title,
-          content,
-          createdAt: created_at.getTime(),
           updatedAt: updated_at.getTime(),
           isDeleted: is_deleted == 1,
         }),
