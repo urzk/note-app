@@ -2,6 +2,7 @@ import { useMemo, useRef } from "react";
 
 import { TextAreaCommandOrchestrator, getCommands } from "@uiw/react-md-editor";
 
+import { MdPreview } from "./MdPreview";
 import { EditorTextArea } from "./EditorTextArea";
 import { Toolbar } from "./Toolbar";
 
@@ -16,7 +17,7 @@ export const Editor = () => {
       </div>
       <div className="flex w-full h-screen overflow-auto">
         <EditorTextArea commands={commands} orchestratorRef={orchestratorRef} />
-        <div className="w-1/2 border-l border-zinc-800">ねこ</div>
+        <MdPreview />
       </div>
     </div>
   );
