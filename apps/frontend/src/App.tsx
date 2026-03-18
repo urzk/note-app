@@ -11,7 +11,6 @@ function App() {
         <NoteList />
       </div>
       <Editor />
-      {/* TODO: markdownパース処理をWeb Workerにやらせる */}
     </div>
   );
 }
