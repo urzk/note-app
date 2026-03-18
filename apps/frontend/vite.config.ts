@@ -19,4 +19,10 @@ export default defineConfig({
       "/v1": "http://localhost:3000",
     },
   },
+  resolve: {
+    conditions: ["module"],
+  },
+  worker: {
+    format: "es",
+  },
 });
