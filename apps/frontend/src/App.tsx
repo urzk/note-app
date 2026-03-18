@@ -1,4 +1,5 @@
 import "./style.css";
+import "katex/dist/katex.min.css";
 
 import { Editor } from "./components/Editor";
 import { NoteList } from "./components/NoteList";
