@@ -6,14 +6,15 @@ import remarkRehype from "remark-rehype";
 import rehypeKatex from "rehype-katex";
 import { removePosition } from "unist-util-remove-position";
 
+const processor = unified()
+  .use(remarkParse)
+  .use(remarkGfm)
+  .use(remarkMath)
+  .use(remarkRehype)
+  .use(rehypeKatex);
+
 onmessage = async (e: MessageEvent<{ id: number; md: string }>) => {
   const { id, md } = e.data;
-  const processor = unified()
-    .use(remarkParse)
-    .use(remarkGfm)
-    .use(remarkMath)
-    .use(remarkRehype)
-    .use(rehypeKatex);
   const mdast = processor.parse(md);
   removePosition(mdast);
   const hast = await processor.run(mdast);
