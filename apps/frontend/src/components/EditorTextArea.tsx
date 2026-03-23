@@ -9,6 +9,7 @@ import {
 } from "@uiw/react-md-editor";
 import type { ICommand } from "@uiw/react-md-editor";
 
+import type { Response } from "../types/mdToHastSession";
 import { useNote } from "../hooks/useNote";
 import { getTitle } from "../utils/getTitle";
 import { md2hast } from "../utils/md2hast";
@@ -41,9 +42,11 @@ export const EditorTextArea = ({
 
   useEffect(() => {
     const parse = async () => {
-      const { id, hast } = await md2hast(note?.content ?? "");
-      mutate("note-hast", (current) =>
-        !current || current.id < id ? { id, hast } : current,
+      const { sessionId, hast } = await md2hast(note?.content ?? "");
+      mutate<Response>("note-hast-cache", (current) =>
+        !current || current.sessionId < sessionId
+          ? { sessionId, hast }
+          : current,
       );
     };
     parse();

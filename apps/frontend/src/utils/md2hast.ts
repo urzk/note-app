@@ -1,15 +1,16 @@
 import Md2HastWorker from "../worker/md2hast.worker.ts?worker";
-import type { Root } from "hast";
+import type { Request, Response } from "../types/mdToHastSession";
 
 const worker = new Md2HastWorker();
 let currentId = 0;
 
-export function md2hast(md: string): Promise<{ id: number; hast: Root }> {
+export function md2hast(md: string): Promise<Response> {
   return new Promise((resolve) => {
     worker.onmessage = (e) => {
       resolve(e.data);
     };
-    worker.postMessage({ id: currentId, md });
+    const req: Request = { sessionId: currentId, md };
+    worker.postMessage(req);
     currentId++;
   });
 }
