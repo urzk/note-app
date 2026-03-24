@@ -1,10 +1,12 @@
 import type { RefObject } from "react";
 
 import { unified } from "unified";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
 import remarkParse from "remark-parse";
 import { toString } from "mdast-util-to-string";
 
-const parser = unified().use(remarkParse);
+const parser = unified().use(remarkParse).use(remarkGfm).use(remarkMath);
 
 export const getTitle = (
   content: string,
