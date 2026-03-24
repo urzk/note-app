@@ -40,6 +40,8 @@ export const EditorTextArea = ({
     }
   }, []);
 
+  const titleCacheRef = useRef<{ md: string; title: string } | null>(null);
+
   useEffect(() => {
     const parse = async () => {
       const { sessionId, hast } = await md2hast(note?.content ?? "");
@@ -63,7 +65,7 @@ export const EditorTextArea = ({
         if (note) {
           setNote({
             id: note.id,
-            title: getTitle(content),
+            title: getTitle(content, titleCacheRef),
             content,
             updatedAt: Date.now(),
             isDeleted: false,
