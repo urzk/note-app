@@ -4,7 +4,7 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
-import rehypeKatex from "rehype-katex";
+import rehypeKaTeX from "rehype-katex";
 import { removePosition } from "unist-util-remove-position";
 
 import type { Request, Response } from "../types/mdToHastSession";
@@ -15,7 +15,7 @@ const processor = unified()
   .use(remarkParse)
   .use(remarkBreaks)
   .use(remarkRehype)
-  .use(rehypeKatex);
+  .use(rehypeKaTeX);
 
 onmessage = async (e: MessageEvent<Request>) => {
   const { sessionId, md } = e.data;
