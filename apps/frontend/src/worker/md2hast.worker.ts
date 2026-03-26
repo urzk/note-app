@@ -1,7 +1,8 @@
 import { unified } from "unified";
-import remarkParse from "remark-parse";
-import remarkMath from "remark-math";
+import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import rehypeKatex from "rehype-katex";
 import { removePosition } from "unist-util-remove-position";
@@ -9,9 +10,10 @@ import { removePosition } from "unist-util-remove-position";
 import type { Request, Response } from "../types/mdToHastSession";
 
 const processor = unified()
-  .use(remarkParse)
   .use(remarkGfm)
   .use(remarkMath)
+  .use(remarkParse)
+  .use(remarkBreaks)
   .use(remarkRehype)
   .use(rehypeKatex);
 
