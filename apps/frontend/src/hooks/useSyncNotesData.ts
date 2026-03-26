@@ -1,9 +1,7 @@
 import useSWR from "swr";
 import type { NotesApi } from "@shared/types/note";
 import { mergeNotes } from "../utils/mergeNotes";
-
-const fetcher = (key: string) =>
-  fetch("http://localhost:3000" + key).then((res) => res.json());
+import { syncFetcher } from "../utils/syncFetcher";
 
 export const useSyncNotesData = (key: string) => {
   const { data: current } = useSWR<NotesApi>(key, null);
@@ -11,10 +9,7 @@ export const useSyncNotesData = (key: string) => {
     key,
     async () => {
       //const current = cache.get(key) as NotesApi | undefined;
-      const url = current?.serverTime
-        ? `/v1/notes?updatedAfter=${current.serverTime}`
-        : "/v1/notes";
-      const updated: NotesApi = await fetcher(url);
+      const updated = await syncFetcher(current, []);
       console.log("data fetched!");
       return current ? mergeNotes(current, updated) : updated;
     },
