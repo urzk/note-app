@@ -1,14 +1,15 @@
 import useSWR from "swr";
 
-import type { Note } from "@shared/types/note";
+import type { Note, NotesApi } from "@shared/types/note";
 import { useSyncNotesData } from "../hooks/useSyncNotesData";
-
 import { NoteListItem } from "./NoteListItem";
 
 export const NoteList = () => {
   const { data: selectedNoteId } = useSWR<number>("selected-note-id", null);
   const { data: notesUpdated } = useSWR<Note[]>("notes-updated", null);
-  const { data: notesSynced } = useSyncNotesData("notes-synced");
+  const { data: notesSynced } = useSWR<NotesApi>("notes-synced", null);
+  useSyncNotesData();
+
   const updatedIds = new Set(
     notesUpdated ? notesUpdated.map((note) => note.id) : [],
   );
