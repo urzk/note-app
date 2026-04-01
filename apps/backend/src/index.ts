@@ -4,6 +4,7 @@ import cors from "cors";
 import type { Note, NotesApi } from "@shared/types/note.js";
 import { numberToDate } from "@shared/utils/datetime.js";
 import { getNotes } from "./getNotes.js";
+import { putNotes } from "./putNotes.js";
 
 const app = express();
 const port = 3000;
@@ -14,6 +15,8 @@ app.use(
     credentials: true,
   }),
 );
+
+app.use(express.json());
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
@@ -37,3 +40,21 @@ app.get(
     }
   },
 );
+
+app.put("/v1/notes-sync", async (req, res) => {
+  const updatedAfter = numberToDate(req.body.updatedAfter);
+  let putSuccess = true;
+  try {
+    await putNotes(req.body.updatedNotes);
+  } catch (err) {
+    console.error("putNotes failed:", err);
+    putSuccess = false;
+  }
+  try {
+    const notesApiResponse = await getNotes(updatedAfter);
+    res.json(notesApiResponse);
+  } catch (err) {
+    console.error("getNotes failed:", err);
+    res.status(500).json({ err });
+  }
+});

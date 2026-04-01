@@ -23,7 +23,7 @@ export const useSyncNotesData = () => {
 
       const notesSyncUpdates = await syncFetcher(
         updatedAfter,
-        [], // -> notesLocalUpdates,
+        notesLocalUpdates,
       );
       const notesSyncNew = notesSyncCurrent
         ? mergeNotes(notesSyncCurrent, notesSyncUpdates)
@@ -40,7 +40,6 @@ export const useSyncNotesData = () => {
       return notesSyncNew;
     },
     {
-      /*
       onSuccess: () => {
         notesLocalMutate((notesLocalUpdates) => {
           const timeStamp = putLocalTimeStampRef.current;
@@ -49,7 +48,6 @@ export const useSyncNotesData = () => {
           );
         });
       },
-      */
       refreshInterval: 3000,
     },
   );
