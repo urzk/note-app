@@ -28,8 +28,9 @@ export const useSyncNotesData = () => {
         updatedAfter,
         notesLocalUpdates,
       );
+      let updateError: unknown | undefined = undefined;
       if ("updateError" in notesSyncUpdates) {
-        const { updateError } = notesSyncUpdates;
+        updateError = notesSyncUpdates.updateError;
         console.error(updateError);
       }
       const notesSyncNew = notesSyncCurrent
@@ -41,7 +42,11 @@ export const useSyncNotesData = () => {
         throw new Error("Not newest data!");
       }
       serverTimeRef.current = serverTime;
-      if (hasUpdates && putLocalTimeStampRef.current < startTimeStamp) {
+      if (
+        hasUpdates &&
+        !updateError &&
+        putLocalTimeStampRef.current < startTimeStamp
+      ) {
         putLocalTimeStampRef.current = startTimeStamp;
       }
       return notesSyncNew;
