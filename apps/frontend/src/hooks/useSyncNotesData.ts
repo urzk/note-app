@@ -28,6 +28,10 @@ export const useSyncNotesData = () => {
         updatedAfter,
         notesLocalUpdates,
       );
+      if ("updateError" in notesSyncUpdates) {
+        const { updateError } = notesSyncUpdates;
+        console.error(updateError);
+      }
       const notesSyncNew = notesSyncCurrent
         ? mergeNotes(notesSyncCurrent, notesSyncUpdates)
         : notesSyncUpdates;
