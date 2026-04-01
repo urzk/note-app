@@ -14,7 +14,7 @@ export const syncFetcher = async (
 ): Promise<NotesApi> => {
   try {
     if (updatedNotes && updatedNotes.length > 0) {
-      const res = await axios.post<NotesApi>(postUrl, {
+      const res = await axios.put<NotesApi>(postUrl, {
         updatedAfter,
         updatedNotes,
       });

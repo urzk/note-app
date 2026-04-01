@@ -11,7 +11,7 @@ export const useSyncNotesData = () => {
     "notes-updated",
     null,
   );
-  const postLocalTimeStampRef = useRef<number>(0);
+  const putLocalTimeStampRef = useRef<number>(0);
   const serverTimeRef = useRef<number>(0);
 
   useSWR<NotesApi>( // only process to update "notes-synced" in this app
@@ -34,8 +34,8 @@ export const useSyncNotesData = () => {
         throw new Error("Not newest data!");
       }
       serverTimeRef.current = serverTime;
-      if (hasUpdates && postLocalTimeStampRef.current < startTimeStamp) {
-        postLocalTimeStampRef.current = startTimeStamp;
+      if (hasUpdates && putLocalTimeStampRef.current < startTimeStamp) {
+        putLocalTimeStampRef.current = startTimeStamp;
       }
       return notesSyncNew;
     },
@@ -43,7 +43,7 @@ export const useSyncNotesData = () => {
       /*
       onSuccess: () => {
         notesLocalMutate((notesLocalUpdates) => {
-          const timeStamp = postLocalTimeStampRef.current;
+          const timeStamp = putLocalTimeStampRef.current;
           return notesLocalUpdates?.filter(
             (note) => note.updatedAt > timeStamp,
           );
