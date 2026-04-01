@@ -2,6 +2,7 @@ import express from "express";
 import type { Request, Response } from "express";
 import cors from "cors";
 import type { Note, NotesApi } from "@shared/types/note.js";
+import { numberToDate } from "@shared/utils/datetime.js";
 import { getNotes } from "./getNotes.js";
 
 const app = express();
@@ -25,10 +26,7 @@ app.get(
     res: Response<NotesApi | { err: unknown }>,
   ) => {
     console.log(req.query.updatedAfter);
-    const updatedAfter =
-      typeof req.query.updatedAfter === "string"
-        ? new Date(Number(req.query.updatedAfter))
-        : undefined;
+    const updatedAfter = numberToDate(req.query.updatedAfter);
     try {
       const notesApiResponse = await getNotes(updatedAfter);
       console.log(notesApiResponse);
