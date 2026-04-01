@@ -10,3 +10,7 @@ export type NotesApi = {
   serverTime: number;
   notes: Note[];
 };
+
+export type NotesSyncApi = NotesApi & {
+  updateError?: unknown;
+};

@@ -1,7 +1,7 @@
 import express from "express";
 import type { Request, Response } from "express";
 import cors from "cors";
-import type { Note, NotesApi } from "@shared/types/note.js";
+import type { Note, NotesApi, NotesSyncApi } from "@shared/types/note.js";
 import { numberToDate } from "@shared/utils/datetime.js";
 import { getNotes } from "./getNotes.js";
 import { putNotes } from "./putNotes.js";
@@ -25,36 +25,43 @@ app.listen(port, () => {
 app.get(
   "/v1/notes",
   async (
-    req: Request<any, any, any, { updatedAfter?: string }>,
-    res: Response<NotesApi | { err: unknown }>,
+    req: Request<{}, {}, {}, { updatedAfter?: string }>,
+    res: Response<NotesApi | { readError: unknown }>,
   ) => {
-    console.log(req.query.updatedAfter);
     const updatedAfter = numberToDate(req.query.updatedAfter);
     try {
-      const notesApiResponse = await getNotes(updatedAfter);
-      console.log(notesApiResponse);
-      res.json(notesApiResponse);
+      const notesResponse = await getNotes(updatedAfter);
+      res.json(notesResponse);
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ err });
+      console.error("getNotes failed:", err);
+      const readError = err;
+      res.status(500).json({ readError });
     }
   },
 );
 
-app.put("/v1/notes-sync", async (req, res) => {
-  const updatedAfter = numberToDate(req.body.updatedAfter);
-  let putSuccess = true;
-  try {
-    await putNotes(req.body.updatedNotes);
-  } catch (err) {
-    console.error("putNotes failed:", err);
-    putSuccess = false;
-  }
-  try {
-    const notesApiResponse = await getNotes(updatedAfter);
-    res.json(notesApiResponse);
-  } catch (err) {
-    console.error("getNotes failed:", err);
-    res.status(500).json({ err });
-  }
-});
+app.put(
+  "/v1/notes-sync",
+  async (
+    req: Request<{}, {}, { updatedAfter?: string; updatedNotes: Note[] }>,
+    res: Response<NotesSyncApi | { updateError?: unknown; readError: unknown }>,
+  ) => {
+    const updatedAfter = numberToDate(req.body.updatedAfter);
+    let updateError: unknown | undefined = undefined;
+    try {
+      await putNotes(req.body.updatedNotes);
+    } catch (err) {
+      console.error("putNotes failed:", err);
+      updateError = err;
+    }
+    try {
+      const notesResponse = await getNotes(updatedAfter);
+      const notesSyncResponse: NotesSyncApi = { updateError, ...notesResponse };
+      res.json(notesSyncResponse);
+    } catch (err) {
+      console.error("getNotes failed:", err);
+      const readError = err;
+      res.status(500).json({ updateError, readError });
+    }
+  },
+);
