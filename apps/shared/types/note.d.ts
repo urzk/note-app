@@ -6,11 +6,17 @@ export type Note = {
   isDeleted: boolean;
 };
 
-export type NotesApi = {
+export type NotesApiResponse = {
   serverTime: number;
   notes: Note[];
 };
 
-export type NotesSyncApi = NotesApi & {
+export type NotesSyncApiResponse = NotesApiResponse & {
+  updateError?: unknown;
+};
+
+export type NotesErrorResponse = { readError: unknown };
+
+export type NotesSyncErrorResponse = NotesErrorResponse & {
   updateError?: unknown;
 };

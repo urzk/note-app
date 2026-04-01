@@ -1,5 +1,9 @@
 import axios from "axios";
-import type { Note, NotesApi } from "@shared/types/note";
+import type {
+  Note,
+  NotesApiResponse,
+  NotesSyncApiResponse,
+} from "@shared/types/note";
 
 const origin = "http://localhost:3000";
 
@@ -11,16 +15,16 @@ const putUrl = origin + putPath;
 export const syncFetcher = async (
   updatedAfter: number | undefined,
   updatedNotes: Note[] | undefined,
-): Promise<NotesApi> => {
+): Promise<NotesApiResponse | NotesSyncApiResponse> => {
   try {
     if (updatedNotes && updatedNotes.length > 0) {
-      const res = await axios.put<NotesApi>(putUrl, {
+      const res = await axios.put<NotesSyncApiResponse>(putUrl, {
         updatedAfter,
         updatedNotes,
       });
       return res.data;
     } else {
-      const res = await axios.get<NotesApi>(
+      const res = await axios.get<NotesApiResponse>(
         updatedAfter ? getUrl + "?updatedAfter=" + updatedAfter : getUrl,
       );
       return res.data;

@@ -1,5 +1,5 @@
 import type { RowDataPacket } from "mysql2";
-import type { Note, NotesApi } from "@shared/types/note.js";
+import type { Note, NotesApiResponse } from "@shared/types/note.js";
 import { pool } from "./db.js";
 
 export interface NoteDB extends RowDataPacket {
@@ -29,6 +29,6 @@ export const getNotes = async (updatedAfter: Date | undefined) => {
       isDeleted: is_deleted == 1,
     }),
   );
-  const notesApiResponse: NotesApi = { serverTime, notes };
-  return notesApiResponse;
+  const notesResponse: NotesApiResponse = { serverTime, notes };
+  return notesResponse;
 };

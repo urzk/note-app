@@ -1,12 +1,15 @@
 import { useRef } from "react";
 import useSWR from "swr";
 
-import type { Note, NotesApi } from "@shared/types/note";
+import type { Note, NotesApiResponse } from "@shared/types/note";
 import { mergeNotes } from "../utils/mergeNotes";
 import { syncFetcher } from "../utils/syncFetcher";
 
 export const useSyncNotesData = () => {
-  const { data: notesSyncCurrent } = useSWR<NotesApi>("notes-synced", null);
+  const { data: notesSyncCurrent } = useSWR<NotesApiResponse>(
+    "notes-synced",
+    null,
+  );
   const { data: notesLocalUpdates, mutate: notesLocalMutate } = useSWR<Note[]>(
     "notes-updated",
     null,
@@ -14,7 +17,7 @@ export const useSyncNotesData = () => {
   const putLocalTimeStampRef = useRef<number>(0);
   const serverTimeRef = useRef<number>(0);
 
-  useSWR<NotesApi>( // only process to update "notes-synced" in this app
+  useSWR<NotesApiResponse>( // only process to update "notes-synced" in this app
     "notes-synced",
     async () => {
       const updatedAfter = notesSyncCurrent?.serverTime;
