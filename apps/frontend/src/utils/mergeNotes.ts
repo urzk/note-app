@@ -1,6 +1,9 @@
-import type { NotesApi } from "@shared/types/note";
+import type { NotesApiResponse } from "@shared/types/note";
 
-export const mergeNotes = (current: NotesApi, updated: NotesApi): NotesApi => {
+export const mergeNotes = (
+  current: NotesApiResponse,
+  updated: NotesApiResponse,
+): NotesApiResponse => {
   if (current.notes.length == 0) {
     return updated;
   } else if (updated.notes.length == 0) {

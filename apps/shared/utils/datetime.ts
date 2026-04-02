@@ -27,3 +27,13 @@ export const getDateOrTime = (dateTimeNumber: number) => {
   }
   return getTime(dateTime);
 };
+
+export const numberToDate = (dateNumber: number | string | undefined) => {
+  if (typeof dateNumber === "number") {
+    return new Date(dateNumber);
+  } else if (typeof dateNumber === "string") {
+    return new Date(Number(dateNumber));
+  } else {
+    return undefined;
+  }
+};
