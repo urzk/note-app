@@ -7,7 +7,6 @@ export interface NoteDB extends RowDataPacket {
   user_id: number | null; // TODO:
   title: string;
   content: string;
-  created_at: Date;
   updated_at: Date;
   is_deleted: number;
 }
