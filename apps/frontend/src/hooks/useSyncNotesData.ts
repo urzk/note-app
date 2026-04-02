@@ -3,7 +3,7 @@ import useSWR from "swr";
 
 import type { Note, NotesApiResponse } from "@shared/types/note";
 import { mergeNotes } from "../utils/mergeNotes";
-import { syncFetcher } from "../utils/syncFetcher";
+import { getFetcher, putFetcher } from "../utils/fetcher";
 
 export const useSyncNotesData = () => {
   const { data: notesSyncCurrent } = useSWR<NotesApiResponse>(
@@ -24,10 +24,10 @@ export const useSyncNotesData = () => {
       const hasUpdates = notesLocalUpdates && notesLocalUpdates.length > 0;
       const startTimeStamp = hasUpdates ? notesLocalUpdates[0].updatedAt : 0;
 
-      const notesSyncUpdates = await syncFetcher(
-        updatedAfter,
-        notesLocalUpdates,
-      );
+      const notesSyncUpdates = hasUpdates
+        ? await putFetcher(updatedAfter, notesLocalUpdates)
+        : await getFetcher(updatedAfter);
+
       let updateError: unknown | undefined = undefined;
       if ("updateError" in notesSyncUpdates) {
         updateError = notesSyncUpdates.updateError;
