@@ -6,7 +6,7 @@ export const putNotes = async (notes: Note[]) => {
   const conn = await pool.getConnection();
   try {
     await conn.beginTransaction();
-    for (const note of notes) {
+    for (const note of [...notes].reverse()) {
       await putNoteQuery(conn, note);
     }
     await conn.commit();
