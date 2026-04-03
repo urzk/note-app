@@ -31,7 +31,9 @@ export const NoteListItem = memo(
           onClick={() => mutate(id)}
         >
           <div>
-            <h2 className="line-clamp-1">{!title ? "無題" : title}</h2>
+            <h2 className={"line-clamp-1" + (selected ? " text-zinc-100" : "")}>
+              {!title ? "無題" : title}
+            </h2>
           </div>
           <div className="flex items-end justify-between">
             <small>
@@ -43,7 +45,7 @@ export const NoteListItem = memo(
               )}
               {dateOrTime}
             </small>
-            <small>タグ</small>
+            {/* <small>タグ</small> */}
           </div>
         </div>
       </li>
