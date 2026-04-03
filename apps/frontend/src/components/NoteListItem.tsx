@@ -1,6 +1,8 @@
 import { memo, useMemo } from "react";
 import useSWR from "swr";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRotate } from "@fortawesome/free-solid-svg-icons";
 import { getDateOrTime } from "@shared/utils/datetime";
 
 export const NoteListItem = memo(
@@ -33,7 +35,12 @@ export const NoteListItem = memo(
           </div>
           <div className="flex items-end justify-between">
             <small>
-              {isSynced && "[Synced]"}
+              {isSynced && (
+                <>
+                  <FontAwesomeIcon icon={faRotate} size="xs" />
+                  &nbsp;
+                </>
+              )}
               {dateOrTime}
             </small>
             <small>タグ</small>
