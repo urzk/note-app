@@ -1,6 +1,8 @@
 import { memo, useMemo } from "react";
 import useSWR from "swr";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRotate } from "@fortawesome/free-solid-svg-icons";
 import { getDateOrTime } from "@shared/utils/datetime";
 
 export const NoteListItem = memo(
@@ -29,14 +31,21 @@ export const NoteListItem = memo(
           onClick={() => mutate(id)}
         >
           <div>
-            <h2 className="line-clamp-1">{!title ? "無題" : title}</h2>
+            <h2 className={"line-clamp-1" + (selected ? " text-zinc-100" : "")}>
+              {!title ? "無題" : title}
+            </h2>
           </div>
           <div className="flex items-end justify-between">
             <small>
-              {isSynced && "[Synced]"}
+              {isSynced && (
+                <>
+                  <FontAwesomeIcon icon={faRotate} size="xs" />
+                  &nbsp;
+                </>
+              )}
               {dateOrTime}
             </small>
-            <small>タグ</small>
+            {/* <small>タグ</small> */}
           </div>
         </div>
       </li>

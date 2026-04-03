@@ -56,7 +56,7 @@ export const EditorTextArea = ({
 
   return (
     <textarea
-      className="w-1/2 p-4 overflow-auto resize-none outline-0 disabled:bg-zinc-950"
+      className="flex-1 overflow-auto p-4 wrap-anywhere resize-none outline-0 disabled:bg-zinc-950"
       disabled={!note}
       ref={textareaRef}
       value={note?.content ?? ""}
