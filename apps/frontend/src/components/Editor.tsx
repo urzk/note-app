@@ -11,7 +11,7 @@ export const Editor = () => {
   const orchestratorRef = useRef<null | TextAreaCommandOrchestrator>(null);
 
   return (
-    <div className="flex flex-col grow">
+    <div className="flex flex-col flex-1">
       <div className="border-b border-zinc-800 flex justify-between">
         <Toolbar commands={commands} orchestratorRef={orchestratorRef} />
       </div>
