@@ -56,10 +56,10 @@ export const EditorTextArea = ({
 
   return (
     <textarea
-      className="flex-1 view resize-none outline-0 disabled:bg-zinc-950"
+      className="flex-1 view resize-none outline-0 disabled:text-zinc-400"
       disabled={!note}
       ref={textareaRef}
-      value={note?.content ?? ""}
+      value={note ? note.content : "No note selected"}
       onChange={(e) => {
         const content = e.target.value;
         if (note) {
