@@ -5,7 +5,7 @@ import { TextAreaCommandOrchestrator, getCommands } from "@uiw/react-md-editor";
 import { MdPreview } from "./MdPreview";
 import { EditorTextArea } from "./EditorTextArea";
 import { MdToolbar } from "./MdToolbar";
-import { ViewToolbar } from "./ViewToolBar";
+import { ViewToolbar } from "./ViewToolbar";
 
 export const Editor = () => {
   const commands = useMemo(() => getCommands(), []);
