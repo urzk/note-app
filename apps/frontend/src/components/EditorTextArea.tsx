@@ -14,12 +14,18 @@ import { useNote } from "../hooks/useNote";
 import { getTitle } from "../utils/getTitle";
 import { md2hast } from "../utils/md2hast";
 
+import { flexRatio } from "src/utils/flexRatio";
+
 export const EditorTextArea = ({
+  hasMdPreview,
   commands,
   orchestratorRef,
+  ratio,
 }: {
+  hasMdPreview: boolean;
   commands: ICommand<string>[];
   orchestratorRef: RefObject<null | TextAreaCommandOrchestrator>;
+  ratio: number;
 }) => {
   const { data: selectedNoteId } = useSWR<number>("selected-note-id", null);
   const { note, setNote } = useNote(selectedNoteId);
@@ -51,13 +57,15 @@ export const EditorTextArea = ({
           : current,
       );
     };
-    parse();
-  }, [note]);
+    if (hasMdPreview) parse();
+  }, [note, hasMdPreview]);
+
+  const wrapperClassName = flexRatio(ratio) + " view-wrapper";
 
   return (
-    <div className="flex-1 view-wrapper">
+    <div className={wrapperClassName}>
       <textarea
-        className="p-4 view resize-none outline-0 disabled:text-zinc-400"
+        className="p-4 view min-w-0 resize-none outline-0 disabled:text-zinc-400"
         disabled={!note}
         ref={textareaRef}
         value={note ? note.content : "No note selected"}

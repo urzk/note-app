@@ -5,13 +5,15 @@ import { unified } from "unified";
 import rehypeReact from "rehype-react";
 
 import type { Response } from "../types/mdToHastSession";
+import { flexRatio } from "src/utils/flexRatio";
 
 const compiler = unified().use(rehypeReact, production);
 
-export const MdPreview = () => {
+export const MdPreview = ({ ratio }: { ratio: number }) => {
+  const wrapperClassName = flexRatio(ratio) + " border-l view-wrapper";
   const { data } = useSWR<Response>("note-hast-cache", null);
   return (
-    <div className="border-l flex-1 view-wrapper">
+    <div className={wrapperClassName}>
       <div className="p-4 preview-prose view">
         {data && compiler.stringify(data.hast)}
       </div>
