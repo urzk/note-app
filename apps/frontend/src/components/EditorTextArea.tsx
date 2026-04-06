@@ -16,15 +16,19 @@ import { md2hast } from "../utils/md2hast";
 
 import { flexRatio } from "src/utils/flexRatio";
 
+const borderDirections = ["border-r", "border-t", "border-l", "border-b"];
+
 export const EditorTextArea = ({
   hasMdPreview,
   commands,
   orchestratorRef,
+  position,
   ratio,
 }: {
   hasMdPreview: boolean;
   commands: ICommand<string>[];
   orchestratorRef: RefObject<null | TextAreaCommandOrchestrator>;
+  position: number;
   ratio: number;
 }) => {
   const { data: selectedNoteId } = useSWR<number>("selected-note-id", null);
@@ -61,7 +65,8 @@ export const EditorTextArea = ({
   }, [note, hasMdPreview]);
 
   let wrapperClassName = flexRatio(ratio) + " view-wrapper";
-  if (hasMdPreview) wrapperClassName += " border-r";
+  if (hasMdPreview)
+    wrapperClassName = wrapperClassName + " " + borderDirections[position % 4];
 
   if (ratio == 0) return <></>;
 
