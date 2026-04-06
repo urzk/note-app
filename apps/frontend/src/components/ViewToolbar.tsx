@@ -16,7 +16,7 @@ export const ViewToolbar = ({ setRatio, setPosition }) => {
         <button
           onClick={(e) => {
             e.stopPropagation();
-            setRatio((ratio) => (ratio <= 0 ? 0 : ratio - 1));
+            setRatio((ratio) => (ratio <= 0 || e.shiftKey ? 0 : ratio - 1));
           }}
         >
           <FontAwesomeIcon icon={faSquareRegular} size="1x" />
@@ -26,7 +26,7 @@ export const ViewToolbar = ({ setRatio, setPosition }) => {
         <button
           onClick={(e) => {
             e.stopPropagation();
-            setRatio((ratio) => (ratio >= 12 ? 12 : ratio + 1));
+            setRatio((ratio) => (ratio >= 12 || e.shiftKey ? 12 : ratio + 1));
           }}
         >
           <FontAwesomeIcon icon={faSquareSolid} size="1x" />
@@ -38,6 +38,7 @@ export const ViewToolbar = ({ setRatio, setPosition }) => {
           onClick={(e) => {
             e.stopPropagation();
             setPosition(0);
+            setRatio(6);
           }}
         >
           <SplitscreenRight />
@@ -48,6 +49,7 @@ export const ViewToolbar = ({ setRatio, setPosition }) => {
           onClick={(e) => {
             e.stopPropagation();
             setPosition(1);
+            setRatio(6);
           }}
         >
           <SplitscreenTop />
@@ -58,6 +60,7 @@ export const ViewToolbar = ({ setRatio, setPosition }) => {
           onClick={(e) => {
             e.stopPropagation();
             setPosition(2);
+            setRatio(6);
           }}
         >
           <SplitscreenLeft />
@@ -68,6 +71,7 @@ export const ViewToolbar = ({ setRatio, setPosition }) => {
           onClick={(e) => {
             e.stopPropagation();
             setPosition(3);
+            setRatio(6);
           }}
         >
           <SplitscreenBottom />
