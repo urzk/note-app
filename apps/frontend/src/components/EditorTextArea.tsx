@@ -75,6 +75,11 @@ export const EditorTextArea = ({
         }}
         onKeyDown={onKeyDown}
       />
+      <div className="absolute bottom-0 right-0 px-1">
+        <small className="bg-zinc-900 opacity-75 text-zinc-400 text-sm">
+          {note ? note.content.length + "文字" : ""}
+        </small>
+      </div>
     </div>
   );
 };
