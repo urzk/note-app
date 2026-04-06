@@ -60,7 +60,10 @@ export const EditorTextArea = ({
     if (hasMdPreview) parse();
   }, [note, hasMdPreview]);
 
-  const wrapperClassName = flexRatio(ratio) + " view-wrapper";
+  let wrapperClassName = flexRatio(ratio) + " view-wrapper";
+  if (hasMdPreview) wrapperClassName += " border-r";
+
+  if (ratio == 0) return <></>;
 
   return (
     <div className={wrapperClassName}>

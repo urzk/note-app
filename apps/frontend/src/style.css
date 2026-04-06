@@ -11,7 +11,7 @@
 }
 
 .view-wrapper {
-  @apply border-zinc-800 flex relative;
+  @apply border-zinc-800 flex relative min-h-0 min-w-0;
 }
 
 .view {

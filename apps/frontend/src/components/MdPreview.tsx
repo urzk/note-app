@@ -10,7 +10,7 @@ import { flexRatio } from "src/utils/flexRatio";
 const compiler = unified().use(rehypeReact, production);
 
 export const MdPreview = ({ ratio }: { ratio: number }) => {
-  const wrapperClassName = flexRatio(ratio) + " border-l view-wrapper";
+  const wrapperClassName = flexRatio(ratio) + " view-wrapper";
   const { data } = useSWR<Response>("note-hast-cache", null);
   return (
     <div className={wrapperClassName}>
