@@ -5,7 +5,7 @@ import type {
   TextAreaCommandOrchestrator,
 } from "@uiw/react-md-editor";
 
-export const Toolbar = memo(
+export const MdToolbar = memo(
   ({
     commands,
     orchestratorRef,
