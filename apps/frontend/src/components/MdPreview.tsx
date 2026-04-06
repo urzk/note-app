@@ -11,8 +11,10 @@ const compiler = unified().use(rehypeReact, production);
 export const MdPreview = () => {
   const { data } = useSWR<Response>("note-hast-cache", null);
   return (
-    <div className="flex-1 view border-l preview-prose">
-      {data && compiler.stringify(data.hast)}
+    <div className="border-l flex-1 view-wrapper">
+      <div className="p-4 preview-prose view">
+        {data && compiler.stringify(data.hast)}
+      </div>
     </div>
   );
 };

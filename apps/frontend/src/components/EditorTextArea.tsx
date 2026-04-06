@@ -55,24 +55,26 @@ export const EditorTextArea = ({
   }, [note]);
 
   return (
-    <textarea
-      className="flex-1 view resize-none outline-0 disabled:text-zinc-400"
-      disabled={!note}
-      ref={textareaRef}
-      value={note ? note.content : "No note selected"}
-      onChange={(e) => {
-        const content = e.target.value;
-        if (note) {
-          setNote({
-            id: note.id,
-            title: getTitle(content, titleCacheRef),
-            content,
-            updatedAt: Date.now(),
-            isDeleted: false,
-          });
-        }
-      }}
-      onKeyDown={onKeyDown}
-    />
+    <div className="flex-1 view-wrapper">
+      <textarea
+        className="p-4 view resize-none outline-0 disabled:text-zinc-400"
+        disabled={!note}
+        ref={textareaRef}
+        value={note ? note.content : "No note selected"}
+        onChange={(e) => {
+          const content = e.target.value;
+          if (note) {
+            setNote({
+              id: note.id,
+              title: getTitle(content, titleCacheRef),
+              content,
+              updatedAt: Date.now(),
+              isDeleted: false,
+            });
+          }
+        }}
+        onKeyDown={onKeyDown}
+      />
+    </div>
   );
 };

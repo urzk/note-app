@@ -10,8 +10,12 @@
   @apply bg-zinc-900;
 }
 
+.view-wrapper {
+  @apply border-zinc-800 flex relative;
+}
+
 .view {
-  @apply border-zinc-800 overflow-auto p-4 wrap-anywhere;
+  @apply flex-1 overflow-auto wrap-anywhere;
 }
 
 .preview-prose {
