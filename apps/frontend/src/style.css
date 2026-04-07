@@ -9,3 +9,15 @@
   @apply text-zinc-300;
   @apply bg-zinc-900;
 }
+
+.view-wrapper {
+  @apply border-zinc-800 flex relative min-h-0 min-w-0;
+}
+
+.view {
+  @apply flex-1 overflow-auto wrap-anywhere;
+}
+
+.preview-prose {
+  @apply max-w-none prose dark:prose-invert prose-zinc;
+}

@@ -3,16 +3,25 @@ import useSWR from "swr";
 
 import { unified } from "unified";
 import rehypeReact from "rehype-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 
 import type { Response } from "../types/mdToHastSession";
+import { flexRatio } from "src/utils/flexRatio";
 
 const compiler = unified().use(rehypeReact, production);
 
-export const MdPreview = () => {
+export const MdPreview = ({ ratio }: { ratio: number }) => {
+  const wrapperClassName = flexRatio(ratio) + " view-wrapper";
   const { data } = useSWR<Response>("note-hast-cache", null);
   return (
-    <div className="flex-1 overflow-auto p-4 wrap-anywhere border-l border-zinc-800 prose dark:prose-invert prose-zinc">
-      {data && compiler.stringify(data.hast)}
+    <div className={wrapperClassName}>
+      <div className="p-4 preview-prose view">
+        {data && compiler.stringify(data.hast)}
+      </div>
+      <div className="absolute top-0 right-0 opacity-75">
+        <FontAwesomeIcon icon={faEye} />
+      </div>
     </div>
   );
 };
