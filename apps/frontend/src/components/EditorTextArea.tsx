@@ -8,6 +8,8 @@ import {
   TextAreaCommandOrchestrator,
 } from "@uiw/react-md-editor";
 import type { ICommand } from "@uiw/react-md-editor";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
 
 import type { Response } from "../types/mdToHastSession";
 import { useNote } from "../hooks/useNote";
@@ -91,6 +93,12 @@ export const EditorTextArea = ({
         }}
         onKeyDown={onKeyDown}
       />
+      <div
+        className="absolute top-0 right-0 opacity-75"
+        onClick={() => textareaRef.current?.focus()}
+      >
+        <FontAwesomeIcon icon={faPen} />
+      </div>
       <div className="absolute bottom-0 right-0 px-1">
         <small className="bg-zinc-900 opacity-75 text-sm">
           {note ? note.content.length + "文字" : ""}

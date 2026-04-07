@@ -3,6 +3,8 @@ import useSWR from "swr";
 
 import { unified } from "unified";
 import rehypeReact from "rehype-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 
 import type { Response } from "../types/mdToHastSession";
 import { flexRatio } from "src/utils/flexRatio";
@@ -16,6 +18,9 @@ export const MdPreview = ({ ratio }: { ratio: number }) => {
     <div className={wrapperClassName}>
       <div className="p-4 preview-prose view">
         {data && compiler.stringify(data.hast)}
+      </div>
+      <div className="absolute top-0 right-0 opacity-75">
+        <FontAwesomeIcon icon={faEye} />
       </div>
     </div>
   );
