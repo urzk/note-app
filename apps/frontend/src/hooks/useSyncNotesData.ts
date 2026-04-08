@@ -1,30 +1,31 @@
 import { useRef } from "react";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 
 import type { Note } from "@shared/types/note";
 import { mergeNotes } from "../utils/mergeNotes";
 import { getFetcher, putFetcher } from "../utils/fetcher";
 
 export const useSyncNotesData = () => {
-  const { data: notesSyncCurrent } = useSWR<Note[]>("notes-synced", null);
+  const { data: notesSyncedCurrent } = useSWR<Note[]>("notes-synced", null);
   const { data: notesLocalUpdates, mutate: notesLocalMutate } = useSWR<Note[]>(
     "notes-updated",
     null,
   );
   const putLocalTimeStampRef = useRef<number>(0);
-  const serverTimeRef = useRef<number>(0);
 
   useSWR<Note[]>( // only process to update "notes-synced" in this app
     "notes-synced",
     async () => {
-      const hasSynced = notesSyncCurrent && notesSyncCurrent.length > 0;
-      const hasUpdates = notesLocalUpdates && notesLocalUpdates.length > 0;
+      const hasSynced = notesSyncedCurrent && notesSyncedCurrent.length > 0;
+      const hasLocalUpdates = notesLocalUpdates && notesLocalUpdates.length > 0;
       const updatedAfter = hasSynced
-        ? notesSyncCurrent[0].updatedAt
+        ? notesSyncedCurrent[0].updatedAt
         : undefined;
-      const startTimeStamp = hasUpdates ? notesLocalUpdates[0].updatedAt : 0;
+      const startTimeStamp = hasLocalUpdates
+        ? notesLocalUpdates[0].updatedAt
+        : 0;
 
-      const notesResponse = hasUpdates
+      const notesResponse = hasLocalUpdates
         ? await putFetcher(updatedAfter, notesLocalUpdates)
         : await getFetcher(updatedAfter);
 
@@ -33,23 +34,21 @@ export const useSyncNotesData = () => {
         updateError = notesResponse.updateError;
         console.error(updateError);
       }
-      const notesSyncNew = notesSyncCurrent
-        ? mergeNotes(notesSyncCurrent, notesResponse.notes)
-        : notesResponse.notes;
+      const { serverTime, notes: notesUpdated } = notesResponse;
+      const notesSyncedNew = notesSyncedCurrent
+        ? mergeNotes(notesSyncedCurrent, notesUpdated)
+        : notesUpdated;
 
-      const serverTime = notesResponse.serverTime;
-      if (serverTimeRef.current > serverTime) {
-        throw new Error("Not newest data!");
-      }
-      serverTimeRef.current = serverTime;
+      mutate<number>("last-synced-time", serverTime);
+
       if (
-        hasUpdates &&
+        hasLocalUpdates &&
         !updateError &&
         putLocalTimeStampRef.current < startTimeStamp
       ) {
         putLocalTimeStampRef.current = startTimeStamp;
       }
-      return notesSyncNew;
+      return notesSyncedNew;
     },
     {
       onSuccess: () => {
