@@ -1,22 +1,25 @@
-import type { NotesApiResponse } from "@shared/types/note";
+import type { Note } from "@shared/types/note";
 
-export const mergeNotes = (
-  current: NotesApiResponse,
-  updated: NotesApiResponse,
-): NotesApiResponse => {
-  if (current.notes.length == 0) {
+export const mergeNotes = (current: Note[], updated: Note[]): Note[] => {
+  if (current.length == 0) {
     return updated;
-  } else if (updated.notes.length == 0) {
-    return { serverTime: updated.serverTime, notes: current.notes };
+  } else if (updated.length == 0) {
+    return current;
+  }
+  if (updated[updated.length - 1].updatedAt < current[0].updatedAt) {
+    const err = new Error("time paradox");
+    console.error(err);
+    throw err;
   }
   const updatedIds = new Set<number>();
-  updated.notes.forEach((note) => {
+  updated.forEach((note) => {
     updatedIds.add(note.id);
   });
-  current.notes.forEach((note) => {
+  const merged = [...updated];
+  current.forEach((note) => {
     if (!updatedIds.has(note.id)) {
-      updated.notes.push(note);
+      merged.push(note);
     }
   });
-  return updated;
+  return merged;
 };
