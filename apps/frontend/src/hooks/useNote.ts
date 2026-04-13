@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import type { Note } from "@shared/types/note";
+import db from "src/lib/db/clientDB";
 
 export const useNote = (
   id: number | undefined,
@@ -11,6 +12,7 @@ export const useNote = (
       note,
       ...current.filter((n) => n.id !== note.id),
     ]);
+    db.updated.put(note).catch(console.error);
   };
   const note =
     id === undefined

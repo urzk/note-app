@@ -57,6 +57,8 @@ export const useSyncNotesData = () => {
           const unSyncedNotes = notesLocalUpdates?.filter(
             (note) => note.updatedAt > timeStamp,
           );
+          await db.updated.clear(); // TODO: optimize to only delete synced notes
+          if (unSyncedNotes) await db.updated.bulkPut(unSyncedNotes);
           return unSyncedNotes;
         });
       },
