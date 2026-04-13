@@ -37,12 +37,11 @@ export const useSyncNotesData = () => {
 
         mutate<number>("last-synced-time", serverTime);
 
-        // await db.synced.bulkPut(notesUpdated);
+        await db.synced.bulkPut(notesUpdated);
 
         const notesSyncedNew = notesSyncedCurrent
           ? mergeNotes(notesSyncedCurrent, notesUpdated)
           : notesUpdated;
-
         mutate<Note[]>("notes-synced", notesSyncedNew);
 
         if (
