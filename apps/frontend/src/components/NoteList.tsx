@@ -21,12 +21,10 @@ export const NoteList = () => {
       {notesUpdated &&
         notesUpdated.map((note) => (
           <NoteListItem
-            id={note.id}
-            state={isSaved(note) ? "saved" : "none"}
-            selected={note.id === selectedNoteId}
-            title={note.title}
-            updatedAt={note.updatedAt}
             key={note.id}
+            note={note}
+            selected={note.id === selectedNoteId}
+            state={isSaved(note) ? "saved" : "none"}
           />
         ))}
       {notesSynced &&
@@ -34,12 +32,10 @@ export const NoteList = () => {
           (note) =>
             !updatedIds.has(note.id) && (
               <NoteListItem
-                id={note.id}
-                state="synced"
-                selected={note.id === selectedNoteId}
-                title={note.title}
-                updatedAt={note.updatedAt}
                 key={note.id}
+                note={note}
+                selected={note.id === selectedNoteId}
+                state="synced"
               />
             ),
         )}
