@@ -46,14 +46,9 @@ export const useSaveNotes = () => {
   useSWR(
     "notes-updated-save",
     async () => {
-      let count: number = 0;
-      for (const note of notesUpdated ?? []) {
-        if (!isSaved(note)) {
-          await db.updated.put(note);
-          count++;
-        }
-      }
-      if (count > 0) {
+      const unSavedNotes = notesUpdated?.filter((note) => !isSaved(note)) ?? [];
+      if (unSavedNotes.length !== 0) {
+        await db.updated.bulkPut(unSavedNotes);
         mutate();
       }
     },
