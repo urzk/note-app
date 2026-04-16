@@ -17,8 +17,23 @@ export const useSaveNotes = () => {
   const { data: savedNotes, mutate } = useSWRImmutable<Map<number, number>>(
     "notes-updated-saved",
     fetchSavedNotes,
-    { refreshWhenOffline: true },
+    {
+      dedupingInterval: 250,
+      refreshWhenOffline: true,
+      compare: (a, b) => {
+        if (a === b) {
+          return true; // return true when both are undefined
+        } else {
+          if (!a || !b || a.size !== b.size) return false; // return false when either is undefined
+          for (const [key, value] of a) {
+            if (b.get(key) !== value) return false;
+          }
+          return true;
+        }
+      },
+    },
   );
+
   const { data: notesUpdated } = useSWRImmutable<Note[]>(
     "notes-updated",
     () => localFetcher("updated"),
@@ -27,10 +42,10 @@ export const useSaveNotes = () => {
   const isSaved = (note: Note) => {
     return savedNotes?.get(note.id) === note.updatedAt;
   };
+
   useSWR(
     "notes-updated-save",
     async () => {
-      // 0.5秒間隔に実行したい。複数コンポーネントからこのフックが読み込まれていても重複実行されないようにしたい
       let count: number = 0;
       for (const note of notesUpdated ?? []) {
         if (!isSaved(note)) {
@@ -42,7 +57,7 @@ export const useSaveNotes = () => {
         mutate();
       }
     },
-    { refreshInterval: 500 },
+    { dedupingInterval: 250, refreshInterval: 250, refreshWhenOffline: true },
   );
 
   return { isSaved };
