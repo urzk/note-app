@@ -22,7 +22,7 @@ export const NoteList = () => {
         notesUpdated.map((note) => (
           <NoteListItem
             id={note.id}
-            isSynced={false}
+            state={isSaved(note) ? "saved" : "none"}
             selected={note.id === selectedNoteId}
             title={note.title}
             updatedAt={note.updatedAt}
@@ -35,7 +35,7 @@ export const NoteList = () => {
             !updatedIds.has(note.id) && (
               <NoteListItem
                 id={note.id}
-                isSynced={true}
+                state="synced"
                 selected={note.id === selectedNoteId}
                 title={note.title}
                 updatedAt={note.updatedAt}
