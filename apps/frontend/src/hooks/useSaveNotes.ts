@@ -24,17 +24,6 @@ export const useSaveNotes = () => {
     {
       dedupingInterval: 250,
       refreshWhenOffline: true,
-      compare: (a, b) => {
-        if (a === b) {
-          return true; // return true when both are undefined
-        } else {
-          if (!a || !b || a.size !== b.size) return false; // return false when either is undefined
-          for (const [key, value] of a) {
-            if (b.get(key) !== value) return false;
-          }
-          return true;
-        }
-      },
     },
   );
 
