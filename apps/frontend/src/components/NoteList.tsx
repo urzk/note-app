@@ -1,7 +1,7 @@
 import useSWR from "swr";
 
 import type { Note } from "@shared/types/note";
-import { useSyncNotesData } from "../hooks/useSyncNotesData";
+import { useSyncNotes } from "../hooks/useSyncNotes";
 import { useSaveNotes } from "src/hooks/useSaveNotes";
 import { NoteListItem } from "./NoteListItem";
 
@@ -9,7 +9,7 @@ export const NoteList = () => {
   const { data: selectedNoteId } = useSWR<number>("selected-note-id", null);
   const { data: notesUpdated } = useSWR<Note[]>("notes-updated", null);
   const { data: notesSynced } = useSWR<Note[]>("notes-synced", null);
-  useSyncNotesData();
+  useSyncNotes();
   const { isSaved } = useSaveNotes();
 
   const updatedIds = new Set(

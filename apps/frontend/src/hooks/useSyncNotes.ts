@@ -12,7 +12,7 @@ import type {
   NotesSyncApiResponse,
 } from "@shared/types/note";
 
-export const useSyncNotesData = () => {
+export const useSyncNotes = () => {
   const { data: notesSynced, mutate: mutateNotesSynced } = useSWRImmutable<
     Note[]
   >("notes-synced", () => localFetcher("synced"), { refreshWhenOffline: true });
@@ -27,7 +27,7 @@ export const useSyncNotesData = () => {
   const updatedAfter = hasSynced ? notesSynced[0].updatedAt : undefined;
   const startTimeStamp = hasUpdated ? notesUpdated[0].updatedAt : 0;
 
-  useSWR<NotesApiResponse | NotesSyncApiResponse>( // only process to update "notes-synced" in this app
+  useSWR<NotesApiResponse | NotesSyncApiResponse>(
     "notes-sync",
     async () =>
       hasUpdated
