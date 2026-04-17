@@ -14,7 +14,11 @@ const fetchSavedNotes = async () => {
 };
 
 export const useSaveNotes = () => {
-  const { data: savedNotes, mutate } = useSWRImmutable<Map<number, number>>(
+  const {
+    data: savedNotes,
+    isLoading,
+    mutate,
+  } = useSWRImmutable<Map<number, number>>(
     "notes-updated-saved",
     fetchSavedNotes,
     {
@@ -40,12 +44,14 @@ export const useSaveNotes = () => {
     { refreshWhenOffline: true },
   );
   const isSaved = (note: Note) => {
-    return savedNotes?.get(note.id) === note.updatedAt;
+    // return true when isLoading
+    return isLoading || savedNotes?.get(note.id) === note.updatedAt;
   };
 
   useSWR(
     "notes-updated-save",
     async () => {
+      if (isLoading) return;
       const unSavedNotes = notesUpdated?.filter((note) => !isSaved(note)) ?? [];
       if (unSavedNotes.length !== 0) {
         await db.updated.bulkPut(unSavedNotes);

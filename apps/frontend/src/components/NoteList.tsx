@@ -9,8 +9,8 @@ export const NoteList = () => {
   const { data: selectedNoteId } = useSWR<number>("selected-note-id", null);
   const { data: notesUpdated } = useSWR<Note[]>("notes-updated", null);
   const { data: notesSynced } = useSWR<Note[]>("notes-synced", null);
-  useSyncNotes();
   const { isSaved } = useSaveNotes();
+  useSyncNotes();
 
   const updatedIds = new Set(
     notesUpdated ? notesUpdated.map((note) => note.id) : [],
