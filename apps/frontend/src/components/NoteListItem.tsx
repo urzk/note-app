@@ -3,22 +3,21 @@ import useSWR from "swr";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotate } from "@fortawesome/free-solid-svg-icons";
+import { faDownload } from "@fortawesome/free-solid-svg-icons";
+import type { Note } from "@shared/types/note";
 import { getDateOrTime } from "@shared/utils/datetime";
 
 export const NoteListItem = memo(
   ({
-    id,
-    title,
+    note,
     selected,
-    updatedAt,
-    isSynced,
+    state,
   }: {
-    id: number;
-    title: string;
+    note: Note;
     selected: boolean;
-    updatedAt: number;
-    isSynced: boolean;
+    state: "synced" | "saved" | "none";
   }) => {
+    const { id, title, updatedAt } = note;
     const { mutate } = useSWR<number>("selected-note-id", null);
     const dateOrTime = useMemo(() => getDateOrTime(updatedAt), [updatedAt]); // TODO: 日付変更時の更新
 
@@ -37,15 +36,15 @@ export const NoteListItem = memo(
           </div>
           <div className="flex items-end justify-between">
             <small>
-              {isSynced && (
-                <>
-                  <FontAwesomeIcon icon={faRotate} size="xs" />
-                  &nbsp;
-                </>
+              {state === "synced" && (
+                <FontAwesomeIcon icon={faRotate} size="xs" />
               )}
-              {dateOrTime}
+              {state === "saved" && (
+                <FontAwesomeIcon icon={faDownload} size="xs" />
+              )}
+              {state === "none" && <div className="inline-block w-3 h-1" />}
+              &nbsp;{dateOrTime}
             </small>
-            {/* <small>タグ</small> */}
           </div>
         </div>
       </li>

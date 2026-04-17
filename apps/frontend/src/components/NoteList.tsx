@@ -1,14 +1,16 @@
 import useSWR from "swr";
 
 import type { Note } from "@shared/types/note";
-import { useSyncNotesData } from "../hooks/useSyncNotesData";
+import { useSyncNotes } from "../hooks/useSyncNotes";
+import { useSaveNotes } from "src/hooks/useSaveNotes";
 import { NoteListItem } from "./NoteListItem";
 
 export const NoteList = () => {
   const { data: selectedNoteId } = useSWR<number>("selected-note-id", null);
   const { data: notesUpdated } = useSWR<Note[]>("notes-updated", null);
   const { data: notesSynced } = useSWR<Note[]>("notes-synced", null);
-  useSyncNotesData();
+  const { isSaved } = useSaveNotes();
+  useSyncNotes();
 
   const updatedIds = new Set(
     notesUpdated ? notesUpdated.map((note) => note.id) : [],
@@ -19,12 +21,10 @@ export const NoteList = () => {
       {notesUpdated &&
         notesUpdated.map((note) => (
           <NoteListItem
-            id={note.id}
-            isSynced={false}
-            selected={note.id === selectedNoteId}
-            title={note.title}
-            updatedAt={note.updatedAt}
             key={note.id}
+            note={note}
+            selected={note.id === selectedNoteId}
+            state={isSaved(note) ? "saved" : "none"}
           />
         ))}
       {notesSynced &&
@@ -32,12 +32,10 @@ export const NoteList = () => {
           (note) =>
             !updatedIds.has(note.id) && (
               <NoteListItem
-                id={note.id}
-                isSynced={true}
-                selected={note.id === selectedNoteId}
-                title={note.title}
-                updatedAt={note.updatedAt}
                 key={note.id}
+                note={note}
+                selected={note.id === selectedNoteId}
+                state="synced"
               />
             ),
         )}
