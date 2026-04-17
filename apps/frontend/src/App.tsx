@@ -6,7 +6,7 @@ import { SWRConfig } from "swr";
 import { Editor } from "./components/Editor";
 import { NoteList } from "./components/NoteList";
 
-function App() {
+const App = () => {
   return (
     <SWRConfig value={{ compare: Object.is }}>
       <div className="flex h-screen overflow-hidden">
@@ -18,6 +18,6 @@ function App() {
       </div>
     </SWRConfig>
   );
-}
+};
 
 export default App;
