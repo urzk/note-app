@@ -1,7 +1,10 @@
 import type { Note } from "@shared/types/note";
 
-export const mergeNotes = (current: Note[], updated: Note[]): Note[] => {
-  if (current.length == 0) {
+export const mergeNotes = (
+  current: Note[] | undefined,
+  updated: Note[],
+): Note[] => {
+  if (!current || current.length == 0) {
     return updated;
   } else if (updated.length == 0) {
     return current;

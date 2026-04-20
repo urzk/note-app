@@ -46,9 +46,7 @@ export const useSyncNotes = () => {
 
         await db.synced.bulkPut(notesFromServer);
 
-        const notesSyncedNew = notesSynced
-          ? mergeNotes(notesSynced, notesFromServer)
-          : notesFromServer;
+        const notesSyncedNew = mergeNotes(notesSynced, notesFromServer);
         mutateNotesSynced<Note[]>(notesSyncedNew, false);
 
         if (
