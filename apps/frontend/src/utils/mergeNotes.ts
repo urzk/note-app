@@ -15,11 +15,9 @@ export const mergeNotes = (current: Note[], updated: Note[]): Note[] => {
   updated.forEach((note) => {
     updatedIds.add(note.id);
   });
-  const merged = [...updated];
-  current.forEach((note) => {
-    if (!updatedIds.has(note.id)) {
-      merged.push(note);
-    }
-  });
+  const merged = [
+    ...updated,
+    ...current.filter((note) => !updatedIds.has(note.id)),
+  ];
   return merged;
 };
