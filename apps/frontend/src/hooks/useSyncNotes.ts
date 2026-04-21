@@ -31,13 +31,15 @@ export const useSyncNotes = () => {
       onSuccess: async (apiResponse) => {
         const { serverTime, notes: notesFromServer, updates } = apiResponse;
 
+        // 最終同期時刻（サーバー側でのDate.now()）を記録
         mutate<number>("last-synced-time", serverTime);
 
+        // サーバーからのnotesをローカルのsyncedに保存・キャッシュ更新
         await db.synced.bulkPut(notesFromServer);
-
         const notesSyncedNew = mergeNotes(notesSynced, notesFromServer);
         mutateNotesSynced<Note[]>(notesSyncedNew, false);
 
+        // サーバーへの更新が成功したものをローカルのupdatedから削除
         const successfulUpdates = new Map<number, number>();
         updates?.forEach((update) => {
           if ("err" in update) {
@@ -49,7 +51,6 @@ export const useSyncNotes = () => {
             successfulUpdates.set(update.id, update.updatedAt);
           }
         });
-
         successfulUpdates.forEach(async (updatedAt, id) => {
           const note = await db.updated.get(id);
           if (note && note.updatedAt === updatedAt) {
@@ -58,6 +59,7 @@ export const useSyncNotes = () => {
         });
         if (successfulUpdates.size > 0) mutate("notes-updated-saved");
 
+        // ローカルのupdatedのキャッシュからサーバーへの更新が成功したものを削除
         mutateNotesUpdated<Note[]>(async (notesLocalUpdates) => {
           return notesLocalUpdates?.filter(({ id, updatedAt }) => {
             const successfulUpdatedAt = successfulUpdates.get(id);
