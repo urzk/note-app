@@ -39,7 +39,7 @@ export const useSaveNotes = () => {
     return isLoading || savedNotes?.get(note.id) === note.updatedAt;
   };
 
-  // updatedのキャッシュのうち、保存されていないものをローカルのupdatedに保存、保存済みnotesのメタデータを更新
+  // 0.25秒ごとに実行、updatedのキャッシュのうち、保存されていないものをローカルのupdatedに保存、保存済みnotesのメタデータを更新
   useSWR(
     "notes-updated-save",
     async () => {

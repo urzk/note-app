@@ -21,6 +21,7 @@ export const useSyncNotes = () => {
   const hasUpdated = notesUpdated && notesUpdated.length > 0;
   const updatedAfter = hasSynced ? notesSynced[0].updatedAt : undefined;
 
+  // リモートフェッチ処理（2秒ごとに実行）
   useSWR<NotesApiResponse>(
     "notes-sync",
     async () =>
@@ -59,8 +60,8 @@ export const useSyncNotes = () => {
         });
         if (successfulUpdates.size > 0) mutate("notes-updated-saved");
 
-        // ローカルのupdatedのキャッシュからサーバーへの更新が成功したものを削除
-        mutateNotesUpdated<Note[]>(async (notesLocalUpdates) => {
+        // ローカルのupdatedのキャッシュ（最新キャッシュを反映済み）からサーバーへの更新が成功したものを削除
+        mutateNotesUpdated<Note[]>((notesLocalUpdates) => {
           return notesLocalUpdates?.filter(({ id, updatedAt }) => {
             const successfulUpdatedAt = successfulUpdates.get(id);
             return successfulUpdatedAt !== updatedAt;
