@@ -4,9 +4,7 @@ import cors from "cors";
 import type {
   Note,
   NotesApiResponse,
-  NotesSyncApiResponse,
   NotesErrorResponse,
-  NotesSyncErrorResponse,
 } from "@shared/types/note.js";
 import { numberToDate } from "@shared/utils/datetime.js";
 import { getNotes } from "./getNotes.js";
@@ -50,27 +48,20 @@ app.put(
   "/v1/notes-sync",
   async (
     req: Request<{}, {}, { updatedAfter?: string; updatedNotes: Note[] }>,
-    res: Response<NotesSyncApiResponse | NotesSyncErrorResponse>,
+    res: Response<NotesApiResponse | NotesErrorResponse>,
   ) => {
     const updatedAfter = numberToDate(req.body.updatedAfter);
-    let updateError: unknown | undefined = undefined;
-    try {
-      await putNotes(req.body.updatedNotes);
-    } catch (err) {
-      console.error("putNotes failed:", err);
-      updateError = err;
-    }
+    const updates = await putNotes(req.body.updatedNotes);
     try {
       const notesResponse = await getNotes(updatedAfter);
-      const notesSyncResponse: NotesSyncApiResponse = {
-        updateError,
+      const notesSyncResponse: NotesApiResponse = {
+        updates,
         ...notesResponse,
       };
       res.json(notesSyncResponse);
     } catch (err) {
       console.error("getNotes failed:", err);
-      const readError = err;
-      res.status(500).json({ updateError, readError });
+      res.status(500).json({ updates, readError: err });
     }
   },
 );
