@@ -6,7 +6,7 @@ import db from "src/lib/db/clientDB";
 import localFetcher from "src/utils/localFetcher";
 
 const fetchSavedNotes = async () => {
-  const map = new Map<number, number>();
+  const map = new Map<string, number>();
   await db.updated.each(({ id, updatedAt }) => {
     map.set(id, updatedAt);
   });
@@ -19,7 +19,7 @@ export const useSaveNotes = () => {
     data: savedNotes,
     isLoading,
     mutate,
-  } = useSWRImmutable<Map<number, number>>(
+  } = useSWRImmutable<Map<string, number>>(
     "notes-updated-saved",
     fetchSavedNotes,
     {

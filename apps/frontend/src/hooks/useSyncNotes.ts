@@ -41,7 +41,7 @@ export const useSyncNotes = () => {
         mutateNotesSynced<Note[]>(notesSyncedNew, false);
 
         // サーバーへの更新が成功したものをローカルのupdatedから削除
-        const successfulUpdates = new Map<number, number>();
+        const successfulUpdates = new Map<string, number>();
         updates?.forEach((update) => {
           if ("err" in update) {
             console.error(

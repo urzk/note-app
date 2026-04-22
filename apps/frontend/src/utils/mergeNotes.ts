@@ -14,7 +14,7 @@ export const mergeNotes = (
     console.error(err);
     throw err;
   }
-  const updatedIds = new Set<number>();
+  const updatedIds = new Set<string>();
   updated.forEach((note) => {
     updatedIds.add(note.id);
   });

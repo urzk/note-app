@@ -1,5 +1,5 @@
 export type Note = {
-  id: number;
+  id: string;
   title: string;
   content: string;
   updatedAt: number;
@@ -7,8 +7,8 @@ export type Note = {
 };
 
 export type PutResponse =
-  | { id: number; updatedAt: number }
-  | { id: number; err: unknown };
+  | { id: string; updatedAt: number }
+  | { id: string; err: unknown };
 
 export type NotesApiResponse = {
   serverTime: number;

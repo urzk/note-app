@@ -8,7 +8,7 @@ export const putNoteQuery = async (note: Note): Promise<PutResponse> => {
   try {
     await conn.beginTransaction();
     await conn.query(
-      "UPDATE notes SET title = ?, content = ?, updated_at = NOW(3), is_deleted = ? WHERE id = ?",
+      "UPDATE notes SET title = ?, content = ?, updated_at = NOW(3), is_deleted = ? WHERE id = UUID_TO_BIN(?)",
       [title, content, isDeleted, id],
     );
     await conn.commit();
