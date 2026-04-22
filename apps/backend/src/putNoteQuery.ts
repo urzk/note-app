@@ -15,8 +15,7 @@ export const putNoteQuery = async (note: Note): Promise<PutResponse> => {
     return { id, updatedAt: clientUpdatedAt };
   } catch (err) {
     await conn.rollback();
-    console.error(err);
-    return { id, err };
+    throw err;
   } finally {
     conn.release();
   }
