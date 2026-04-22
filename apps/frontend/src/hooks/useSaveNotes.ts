@@ -13,6 +13,7 @@ const fetchSavedNotes = async () => {
   return map;
 };
 
+// ローカルのupdatedに保存済みのnotesのメタデータ
 export const useSaveNotes = () => {
   const {
     data: savedNotes,
@@ -27,6 +28,7 @@ export const useSaveNotes = () => {
     },
   );
 
+  // updatedのキャッシュ（未保存のnotes含む）
   const { data: notesUpdated } = useSWRImmutable<Note[]>(
     "notes-updated",
     () => localFetcher("updated"),
@@ -37,6 +39,7 @@ export const useSaveNotes = () => {
     return isLoading || savedNotes?.get(note.id) === note.updatedAt;
   };
 
+  // 0.25秒ごとに実行、updatedのキャッシュのうち、保存されていないものをローカルのupdatedに保存、保存済みnotesのメタデータを更新
   useSWR(
     "notes-updated-save",
     async () => {

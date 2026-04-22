@@ -1,9 +1,5 @@
 import axios from "axios";
-import type {
-  Note,
-  NotesApiResponse,
-  NotesSyncApiResponse,
-} from "@shared/types/note";
+import type { Note, NotesApiResponse } from "@shared/types/note";
 
 const origin = "http://localhost:3000";
 
@@ -29,9 +25,9 @@ export const getFetcher = async (
 export const putFetcher = async (
   updatedAfter: number | undefined,
   updatedNotes: Note[],
-): Promise<NotesSyncApiResponse> => {
+): Promise<NotesApiResponse> => {
   try {
-    const res = await axios.put<NotesSyncApiResponse>(putUrl, {
+    const res = await axios.put<NotesApiResponse>(putUrl, {
       updatedAfter,
       updatedNotes,
     });

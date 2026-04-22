@@ -9,14 +9,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquare as faSquareSolid } from "@fortawesome/free-solid-svg-icons";
 import { faSquare as faSquareRegular } from "@fortawesome/free-regular-svg-icons";
 
-export const ViewToolbar = ({ setRatio, setPosition }) => {
+import type { Dispatch, SetStateAction } from "react";
+
+export const ViewToolbar = ({
+  setRatio,
+  setPosition,
+}: {
+  setRatio: Dispatch<SetStateAction<number>>;
+  setPosition: Dispatch<SetStateAction<number>>;
+}) => {
   return (
     <ul className="flex items-center px-1 py-0.5">
       <li className="hover:bg-zinc-800">
         <button
           onClick={(e) => {
             e.stopPropagation();
-            setRatio((ratio) => (ratio <= 0 || e.shiftKey ? 0 : ratio - 1));
+            setRatio((ratio: number) =>
+              ratio <= 0 || e.shiftKey ? 0 : ratio - 1,
+            );
           }}
         >
           <FontAwesomeIcon icon={faSquareRegular} size="1x" />
@@ -26,7 +36,9 @@ export const ViewToolbar = ({ setRatio, setPosition }) => {
         <button
           onClick={(e) => {
             e.stopPropagation();
-            setRatio((ratio) => (ratio >= 12 || e.shiftKey ? 12 : ratio + 1));
+            setRatio((ratio: number) =>
+              ratio >= 12 || e.shiftKey ? 12 : ratio + 1,
+            );
           }}
         >
           <FontAwesomeIcon icon={faSquareSolid} size="1x" />

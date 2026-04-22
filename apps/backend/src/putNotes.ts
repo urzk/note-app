@@ -1,19 +1,17 @@
 import type { Note } from "@shared/types/note.js";
-import { pool } from "./db.js";
 import { putNoteQuery } from "./putNoteQuery.js";
+import type { PutResponse } from "@shared/types/note.js";
 
 export const putNotes = async (notes: Note[]) => {
-  const conn = await pool.getConnection();
-  try {
-    await conn.beginTransaction();
-    for (const note of [...notes].reverse()) {
-      await putNoteQuery(conn, note);
-    }
-    await conn.commit();
-  } catch (err) {
-    await conn.rollback();
-    throw err;
-  } finally {
-    conn.release();
-  }
+  const promises = notes
+    .map(async (note): Promise<PutResponse> => {
+      try {
+        return await putNoteQuery(note);
+      } catch (err) {
+        console.error(`Error updating note with id ${note.id}:`, err);
+        return { id: note.id, err };
+      }
+    })
+    .reverse();
+  return await Promise.all(promises);
 };
