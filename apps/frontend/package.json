@@ -32,7 +32,8 @@
     "swr": "^2.3.8",
     "tailwindcss": "^4.2.1",
     "unified": "^11.0.5",
-    "unist-util-remove-position": "^5.0.0"
+    "unist-util-remove-position": "^5.0.0",
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
