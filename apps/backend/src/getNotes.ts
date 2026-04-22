@@ -3,8 +3,7 @@ import type { Note, NotesApiResponse } from "@shared/types/note.js";
 import { pool } from "./db.js";
 
 export interface NoteDB extends RowDataPacket {
-  id: number;
-  user_id: number | null; // TODO:
+  id: string;
   title: string;
   content: string;
   updated_at: Date;
@@ -12,7 +11,8 @@ export interface NoteDB extends RowDataPacket {
 }
 
 export const getNotes = async (updatedAfter: Date | undefined) => {
-  let query = "SELECT * FROM notes WHERE user_id IS NULL";
+  let query =
+    "SELECT BIN_TO_UUID(id) AS id, title, content, updated_at, is_deleted FROM notes WHERE user_id IS NULL";
   if (updatedAfter && !isNaN(updatedAfter.getTime())) {
     query += " AND updated_at > ?";
   }
