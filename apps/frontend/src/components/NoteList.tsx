@@ -6,7 +6,7 @@ import { useSaveNotes } from "src/hooks/useSaveNotes";
 import { NoteListItem } from "./NoteListItem";
 
 export const NoteList = () => {
-  const { data: selectedNoteId } = useSWR<number>("selected-note-id", null);
+  const { data: selectedNoteId } = useSWR<string>("selected-note-id", null);
   const { data: notesUpdated } = useSWR<Note[]>("notes-updated", null);
   const { data: notesSynced } = useSWR<Note[]>("notes-synced", null);
   const { isSaved } = useSaveNotes();
