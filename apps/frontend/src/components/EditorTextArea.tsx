@@ -33,7 +33,7 @@ export const EditorTextArea = ({
   position: number;
   ratio: number;
 }) => {
-  const { data: selectedNoteId } = useSWR<number>("selected-note-id", null);
+  const { data: selectedNoteId } = useSWR<string>("selected-note-id", null);
   const { note, setNote } = useNote(selectedNoteId);
 
   const onKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -75,7 +75,7 @@ export const EditorTextArea = ({
   return (
     <div className={wrapperClassName}>
       <textarea
-        className="p-4 view min-w-0 resize-none outline-0 disabled:text-zinc-400"
+        className="p-4 pb-64 view min-w-0 resize-none outline-0 disabled:text-zinc-400"
         disabled={!note}
         ref={textareaRef}
         value={note ? note.content : "No note selected"}

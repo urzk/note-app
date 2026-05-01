@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 
@@ -23,7 +25,6 @@ export const useSaveNotes = () => {
     "notes-updated-saved",
     fetchSavedNotes,
     {
-      dedupingInterval: 250,
       refreshWhenOffline: true,
     },
   );
@@ -40,7 +41,7 @@ export const useSaveNotes = () => {
   };
 
   // 0.25秒ごとに実行、updatedのキャッシュのうち、保存されていないものをローカルのupdatedに保存、保存済みnotesのメタデータを更新
-  useSWR(
+  const { mutate: saveNotes } = useSWRImmutable(
     "notes-updated-save",
     async () => {
       if (isLoading) return;
@@ -50,8 +51,14 @@ export const useSaveNotes = () => {
         mutate();
       }
     },
-    { dedupingInterval: 250, refreshInterval: 250, refreshWhenOffline: true },
+    { refreshWhenOffline: true },
   );
+  const { data: notesState } = useSWR<"editing" | "idle">("notes-state", null);
+  useEffect(() => {
+    if (notesState === "idle") {
+      saveNotes();
+    }
+  }, [notesState]);
 
   return { isSaved };
 };

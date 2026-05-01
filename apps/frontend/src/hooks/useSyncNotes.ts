@@ -62,6 +62,7 @@ export const useSyncNotes = () => {
 
         // ローカルのupdatedのキャッシュ（最新キャッシュを反映済み）からサーバーへの更新が成功したものを削除
         mutateNotesUpdated<Note[]>((notesLocalUpdates) => {
+          if (notesLocalUpdates?.[0] === undefined) return notesLocalUpdates;
           return notesLocalUpdates?.filter(({ id, updatedAt }) => {
             const successfulUpdatedAt = successfulUpdates.get(id);
             return successfulUpdatedAt !== updatedAt;

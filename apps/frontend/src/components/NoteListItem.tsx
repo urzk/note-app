@@ -18,7 +18,7 @@ export const NoteListItem = memo(
     state: "synced" | "saved" | "none";
   }) => {
     const { id, title, updatedAt } = note;
-    const { mutate } = useSWR<number>("selected-note-id", null);
+    const { mutate } = useSWR<string>("selected-note-id", null);
     const dateOrTime = useMemo(() => getDateOrTime(updatedAt), [updatedAt]); // TODO: 日付変更時の更新
 
     return (
