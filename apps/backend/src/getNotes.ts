@@ -10,6 +10,22 @@ export interface NoteDB extends RowDataPacket {
   is_deleted: number;
 }
 
+export const getNote = async (id: string) => {
+  let query =
+    "SELECT BIN_TO_UUID(id) AS id, title, content, updated_at, is_deleted FROM notes WHERE id = UUID_TO_BIN(?) AND user_id IS NULL";
+  const [notesDB] = await pool.query<NoteDB[]>(query, [id]);
+  const notes: Note[] = notesDB.map(
+    ({ id, title, content, updated_at, is_deleted }) => ({
+      id,
+      title,
+      content,
+      updatedAt: updated_at.getTime(),
+      isDeleted: is_deleted == 1,
+    }),
+  );
+  return notes[0];
+};
+
 export const getNotes = async (updatedAfter: Date | undefined) => {
   let query =
     "SELECT BIN_TO_UUID(id) AS id, title, content, updated_at, is_deleted FROM notes WHERE user_id IS NULL";

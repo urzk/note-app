@@ -3,6 +3,7 @@ import useSWR from "swr";
 import type { Note } from "@shared/types/note";
 import { useSyncNotes } from "../hooks/useSyncNotes";
 import { useSaveNotes } from "src/hooks/useSaveNotes";
+import { useEditorState } from "src/hooks/useEditorState";
 import { NoteListItem } from "./NoteListItem";
 
 export const NoteList = () => {
@@ -11,6 +12,7 @@ export const NoteList = () => {
   const { data: notesSynced } = useSWR<Note[]>("notes-synced", null);
   const { isSaved } = useSaveNotes();
   useSyncNotes();
+  useEditorState();
 
   const updatedIds = new Set(
     notesUpdated ? notesUpdated.map((note) => note.id) : [],
