@@ -26,7 +26,7 @@ export const NoteList = () => {
             key={note.id}
             note={note}
             selected={note.id === selectedNoteId}
-            state={isSaved(note) ? "saved" : "none"}
+            state={isSaved(note) ? "saved" : "unsaved"}
           />
         ))}
       {notesSynced &&
