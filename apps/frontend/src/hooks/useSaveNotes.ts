@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 
-import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
+import { useAtomValue } from "jotai";
+import { editorStateAtom } from "src/jotai/atoms";
 
 import type { Note } from "@shared/types/note";
 import db from "src/lib/db/clientDB";
@@ -53,7 +54,7 @@ export const useSaveNotes = () => {
     },
     { refreshWhenOffline: true },
   );
-  const { data: notesState } = useSWR<"editing" | "idle">("notes-state", null);
+  const notesState = useAtomValue(editorStateAtom);
   useEffect(() => {
     if (notesState === "idle") {
       saveNotes();
