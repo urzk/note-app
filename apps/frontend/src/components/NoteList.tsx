@@ -1,4 +1,5 @@
 import useSWR from "swr";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import type { Note } from "@shared/types/note";
 import { useSyncNotes } from "../hooks/useSyncNotes";
@@ -18,8 +19,10 @@ export const NoteList = () => {
     notesUpdated ? notesUpdated.map((note) => note.id) : [],
   );
 
+  const [animationParent] = useAutoAnimate();
+
   return (
-    <ul className="flex-1 overflow-y-auto py-3">
+    <ul ref={animationParent} className="flex-1 overflow-y-auto py-3">
       {notesUpdated &&
         notesUpdated.map((note) => (
           <NoteListItem
