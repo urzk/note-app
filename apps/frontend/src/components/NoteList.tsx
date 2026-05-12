@@ -1,4 +1,6 @@
 import useSWR from "swr";
+import { useAtomValue } from "jotai";
+import { selectedNoteIdAtom } from "src/jotai/atoms";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import type { Note } from "@shared/types/note";
@@ -8,7 +10,7 @@ import { useEditorState } from "src/hooks/useEditorState";
 import { NoteListItem } from "./NoteListItem";
 
 export const NoteList = () => {
-  const { data: selectedNoteId } = useSWR<string>("selected-note-id", null);
+  const selectedNoteId = useAtomValue(selectedNoteIdAtom);
   const { data: notesUpdated } = useSWR<Note[]>("notes-updated", null);
   const { data: notesSynced } = useSWR<Note[]>("notes-synced", null);
   const { isSaved } = useSaveNotes();
@@ -24,14 +26,17 @@ export const NoteList = () => {
   return (
     <ul ref={animationParent} className="flex-1 overflow-y-auto py-3">
       {notesUpdated &&
-        notesUpdated.map((note) => (
-          <NoteListItem
-            key={note.id}
-            note={note}
-            selected={note.id === selectedNoteId}
-            state={isSaved(note) ? "saved" : "unsaved"}
-          />
-        ))}
+        notesUpdated.map(
+          (note) =>
+            !note.isDeleted && (
+              <NoteListItem
+                key={note.id}
+                note={note}
+                selected={note.id === selectedNoteId}
+                state={isSaved(note) ? "saved" : "unsaved"}
+              />
+            ),
+        )}
       {notesSynced &&
         notesSynced.map(
           (note) =>

@@ -1,5 +1,6 @@
 import { memo, useMemo } from "react";
-import useSWR from "swr";
+import { useSetAtom } from "jotai";
+import { selectedNoteIdAtom } from "src/jotai/atoms";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -21,7 +22,7 @@ export const NoteListItem = memo(
     state: "synced" | "saved" | "unsaved";
   }) => {
     const { id, title, updatedAt } = note;
-    const { mutate } = useSWR<string>("selected-note-id", null);
+    const setSelectedNoteId = useSetAtom(selectedNoteIdAtom);
     const dateOrTime = useMemo(() => getDateOrTime(updatedAt), [updatedAt]); // TODO: 日付変更時の更新
 
     return (
@@ -30,7 +31,7 @@ export const NoteListItem = memo(
           className={
             "px-3 py-1 rounded-md" + (selected ? " bg-zinc-800 shadow-lg" : "")
           }
-          onClick={() => mutate(id)}
+          onClick={() => setSelectedNoteId(id)}
         >
           <div>
             <h2 className={"line-clamp-1" + (selected ? " text-zinc-100" : "")}>

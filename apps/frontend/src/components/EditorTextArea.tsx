@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import type { KeyboardEvent, RefObject } from "react";
-import useSWR, { mutate } from "swr";
+import { mutate } from "swr";
+import { useAtomValue } from "jotai";
+import { selectedNoteIdAtom } from "src/jotai/atoms";
 
 import {
   handleKeyDown,
@@ -33,7 +35,7 @@ export const EditorTextArea = ({
   position: number;
   ratio: number;
 }) => {
-  const { data: selectedNoteId } = useSWR<string>("selected-note-id", null);
+  const selectedNoteId = useAtomValue(selectedNoteIdAtom);
   const { note, setNote } = useNote(selectedNoteId);
 
   const onKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
