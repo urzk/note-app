@@ -37,7 +37,9 @@ export const useSyncNotes = () => {
 
         // サーバーからのnotesをローカルのsyncedに保存・キャッシュ更新
         await db.synced.bulkPut(notesFromServer);
-        const notesSyncedNew = mergeNotes(notesSynced, notesFromServer);
+        const notesSyncedNew = mergeNotes(notesSynced, notesFromServer).filter(
+          (note) => !note.isDeleted,
+        );
         mutateNotesSynced<Note[]>(notesSyncedNew, false);
 
         // サーバーへの更新が成功したものをローカルのupdatedから削除
