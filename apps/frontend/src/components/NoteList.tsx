@@ -26,14 +26,17 @@ export const NoteList = () => {
   return (
     <ul ref={animationParent} className="flex-1 overflow-y-auto py-3">
       {notesUpdated &&
-        notesUpdated.map((note) => (
-          <NoteListItem
-            key={note.id}
-            note={note}
-            selected={note.id === selectedNoteId}
-            state={isSaved(note) ? "saved" : "unsaved"}
-          />
-        ))}
+        notesUpdated.map(
+          (note) =>
+            !note.isDeleted && (
+              <NoteListItem
+                key={note.id}
+                note={note}
+                selected={note.id === selectedNoteId}
+                state={isSaved(note) ? "saved" : "unsaved"}
+              />
+            ),
+        )}
       {notesSynced &&
         notesSynced.map(
           (note) =>
