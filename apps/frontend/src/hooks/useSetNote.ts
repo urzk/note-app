@@ -9,8 +9,8 @@ export const useSetNote = () => {
   const setNotesUpdatedAt = useSetAtom(notesUpdatedAtAtom);
 
   const setNote = (note: Note) => {
-    setNotesUpdatedAt(note.updatedAt);
-    mutate<Note[]>(
+    setNotesUpdatedAt(note.updatedAt); // 更新日時を更新 -> editorのstateを"idle"から"editing"にする -> "idle"に戻った時にセーブが実行される
+    mutate<Note[]>( // notesUpdatedを更新
       (current = []) => [note, ...current.filter((n) => n.id !== note.id)],
       false,
     );

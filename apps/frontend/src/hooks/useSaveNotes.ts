@@ -41,7 +41,8 @@ export const useSaveNotes = () => {
     return isLoading || savedNotes?.get(note.id) === note.updatedAt;
   };
 
-  // 0.25秒ごとに実行、updatedのキャッシュのうち、保存されていないものをローカルのupdatedに保存、保存済みnotesのメタデータを更新
+  // editorのstateが"editing"->"idle"に戻った時に実行、updatedのキャッシュのうち、保存されていないものをローカルのupdatedに保存、保存済みnotesのメタデータを更新
+  // 現状だと初回マウント時にも実行されてしまうと思われる。今のところ問題はないが、必要に応じて修正を検討
   const { mutate: saveNotes } = useSWRImmutable(
     "notes-updated-save",
     async () => {
