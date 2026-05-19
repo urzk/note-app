@@ -1,8 +1,9 @@
-import { useEffect, useRef } from "react";
-import type { KeyboardEvent, RefObject } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { KeyboardEvent, RefObject, SyntheticEvent } from "react";
 import { mutate } from "swr";
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { selectedNoteIdAtom } from "src/jotai/atoms";
+import { textSelectionLengthAtom } from "src/jotai/atoms";
 
 import {
   handleKeyDown,
@@ -37,6 +38,7 @@ export const EditorTextArea = ({
 }) => {
   const selectedNoteId = useAtomValue(selectedNoteIdAtom);
   const { note, setNote } = useNote(selectedNoteId);
+  const setTextSelectionLength = useSetAtom(textSelectionLengthAtom);
 
   const onKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     handleKeyDown(e, 2, false);
@@ -56,6 +58,20 @@ export const EditorTextArea = ({
 
   const titleCacheRef = useRef<{ md: string; title: string } | null>(null);
 
+  const updateSelectionLength = (target: HTMLTextAreaElement) => {
+    const start = target.selectionStart ?? 0;
+    const end = target.selectionEnd ?? 0;
+    setTextSelectionLength(Math.max(0, end - start));
+  };
+
+  const handleSelect = (e: SyntheticEvent<HTMLTextAreaElement>) => {
+    updateSelectionLength(e.currentTarget);
+  };
+
+  useEffect(() => {
+    updateSelectionLength(textareaRef.current!);
+  });
+
   useEffect(() => {
     const parse = async () => {
       const { sessionId, hast } = await md2hast(note?.content ?? "");
@@ -67,6 +83,8 @@ export const EditorTextArea = ({
     };
     if (hasMdPreview) parse();
   }, [note, hasMdPreview]);
+
+  const displayedSelectionLength = useAtomValue(textSelectionLengthAtom);
 
   let wrapperClassName = flexRatio(ratio) + " view-wrapper";
   if (hasMdPreview)
@@ -92,7 +110,9 @@ export const EditorTextArea = ({
               isDeleted: false,
             });
           }
+          updateSelectionLength(e.target);
         }}
+        onSelect={handleSelect}
         onKeyDown={onKeyDown}
       />
       <div
@@ -103,7 +123,11 @@ export const EditorTextArea = ({
       </div>
       <div className="absolute bottom-0 right-0 px-1">
         <small className="bg-zinc-900 opacity-75 text-sm">
-          {note ? note.content.length + "文字" : ""}
+          {note?.content
+            ? displayedSelectionLength > 0
+              ? `選択中: ${displayedSelectionLength}文字`
+              : `${note.content.length}文字`
+            : ""}
         </small>
       </div>
     </div>
