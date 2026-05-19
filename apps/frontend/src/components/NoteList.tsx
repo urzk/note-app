@@ -40,7 +40,8 @@ export const NoteList = () => {
       {notesSynced &&
         notesSynced.map(
           (note) =>
-            !updatedIds.has(note.id) && (
+            !updatedIds.has(note.id) &&
+            !note.isDeleted && (
               <NoteListItem
                 key={note.id}
                 note={note}
