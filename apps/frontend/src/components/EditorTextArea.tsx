@@ -39,6 +39,10 @@ export const EditorTextArea = ({
   const selectedNoteId = useAtomValue(selectedNoteIdAtom);
   const { note, setNote } = useNote(selectedNoteId);
   const setTextSelectionLength = useSetAtom(textSelectionLengthAtom);
+  const [paddingBottom, setPaddingBottom] = useState<number>(0);
+
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<null | HTMLTextAreaElement>(null);
 
   const onKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     handleKeyDown(e, 2, false);
@@ -47,13 +51,25 @@ export const EditorTextArea = ({
     }
   };
 
-  const textareaRef = useRef<null | HTMLTextAreaElement>(null);
   useEffect(() => {
     if (textareaRef.current) {
       orchestratorRef.current = new TextAreaCommandOrchestrator(
         textareaRef.current,
       );
     }
+  }, []);
+
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver(() => {
+      if (wrapperRef.current) {
+        const wrapperHeight = wrapperRef.current.clientHeight;
+        setPaddingBottom(Math.round(wrapperHeight / 3));
+      }
+    });
+    if (wrapperRef.current) {
+      resizeObserver.observe(wrapperRef.current);
+    }
+    return () => resizeObserver.disconnect();
   }, []);
 
   const titleCacheRef = useRef<{ md: string; title: string } | null>(null);
@@ -94,9 +110,10 @@ export const EditorTextArea = ({
   if (ratio == 0) return <></>;
 
   return (
-    <div className={wrapperClassName}>
+    <div className={wrapperClassName} ref={wrapperRef}>
       <textarea
-        className="p-4 pb-64 view min-w-0 resize-none outline-0 disabled:text-zinc-400"
+        className="p-4 view min-w-0 resize-none outline-0 disabled:text-zinc-400"
+        style={{ paddingBottom: `${paddingBottom}px` }}
         disabled={!note}
         ref={textareaRef}
         value={note ? note.content : "No note selected"}
