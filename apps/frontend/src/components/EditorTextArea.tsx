@@ -69,6 +69,7 @@ export const EditorTextArea = ({
   };
 
   useEffect(() => {
+    if (note?.content?.length === 0) textareaRef.current?.focus();
     updateSelectionLength(textareaRef.current!);
   });
 
