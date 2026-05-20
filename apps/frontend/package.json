@@ -27,6 +27,7 @@
     "rehype-katex": "^7.0.1",
     "rehype-react": "^8.0.0",
     "remark-breaks": "^4.0.0",
+    "remark-cjk-friendly": "^2.0.1",
     "remark-gfm": "^4.0.1",
     "remark-math": "^6.0.0",
     "remark-parse": "^11.0.0",

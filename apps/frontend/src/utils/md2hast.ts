@@ -1,4 +1,4 @@
-import Md2HastWorker from "../worker/md2hast.worker.ts?worker";
+import Md2HastWorker from "../worker/md2hast.worker?worker";
 import type { Request, Response } from "../types/mdToHastSession";
 
 const worker = new Md2HastWorker();

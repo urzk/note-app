@@ -1,5 +1,6 @@
 import { unified } from "unified";
 import remarkBreaks from "remark-breaks";
+import remarkCjkFriendly from "remark-cjk-friendly";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkParse from "remark-parse";
@@ -10,6 +11,7 @@ import { removePosition } from "unist-util-remove-position";
 import type { Request, Response } from "../types/mdToHastSession";
 
 const processor = unified()
+  .use(remarkCjkFriendly)
   .use(remarkGfm)
   .use(remarkMath)
   .use(remarkParse)
