@@ -1,11 +1,12 @@
 import { unified } from "unified";
+import rehypeKaTeX from "rehype-katex";
+import rehypePrism from "rehype-prism-plus";
 import remarkBreaks from "remark-breaks";
 import remarkCjkFriendly from "remark-cjk-friendly";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
-import rehypeKaTeX from "rehype-katex";
 import { removePosition } from "unist-util-remove-position";
 
 import type { Request, Response } from "../types/mdToHastSession";
@@ -17,7 +18,8 @@ const processor = unified()
   .use(remarkParse)
   .use(remarkBreaks)
   .use(remarkRehype)
-  .use(rehypeKaTeX);
+  .use(rehypeKaTeX)
+  .use(rehypePrism);
 
 onmessage = async (e: MessageEvent<Request>) => {
   const { sessionId, md } = e.data;

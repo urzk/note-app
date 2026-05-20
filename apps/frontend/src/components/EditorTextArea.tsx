@@ -21,6 +21,9 @@ import { md2hast } from "../utils/md2hast";
 
 import { flexRatio } from "src/utils/flexRatio";
 
+import "katex/dist/katex.min.css";
+import "prism-theme-github/themes/prism-theme-github-copilot.css";
+
 const borderDirections = ["border-r", "border-t", "border-l", "border-b"];
 
 export const EditorTextArea = ({

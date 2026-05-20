@@ -41,6 +41,9 @@ importers:
       mdast-util-to-string:
         specifier: ^4.0.0
         version: 4.0.0
+      prism-theme-github:
+        specifier: ^1.0.2
+        version: 1.0.2
       react:
         specifier: ^19.2.0
         version: 19.2.4
@@ -50,6 +53,9 @@ importers:
       rehype-katex:
         specifier: ^7.0.1
         version: 7.0.1
+      rehype-prism-plus:
+        specifier: ^2.0.2
+        version: 2.0.2
       rehype-react:
         specifier: ^8.0.0
         version: 8.0.0
@@ -1870,6 +1876,9 @@ packages:
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
+
+  prism-theme-github@1.0.2:
+    resolution: {integrity: sha512-9AFFL0BOoMZISiLT7UcM3YP/AwKMKycIDHMcBl0fVtM3vaHgxa7u9PFoky2QjXncgGEWW4vHPzH2+WRyQJB5tQ==}
 
   progress@2.0.3:
     resolution: {integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==}
@@ -4257,6 +4266,8 @@ snapshots:
       source-map-js: 1.2.1
 
   prelude-ls@1.2.1: {}
+
+  prism-theme-github@1.0.2: {}
 
   progress@2.0.3: {}
 
