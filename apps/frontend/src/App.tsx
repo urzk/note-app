@@ -1,5 +1,4 @@
 import "./style.css";
-import "katex/dist/katex.min.css";
 
 import { SWRConfig } from "swr";
 

@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import { resolve } from "path";
 import electron from "vite-plugin-electron/simple";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
@@ -34,6 +35,16 @@ export default defineConfig({
   },
   resolve: {
     conditions: ["module"],
+    alias: [
+      {
+        find: /^src\/(.*)$/,
+        replacement: resolve(__dirname, "src/$1"),
+      },
+      {
+        find: /^@shared\/(.*)$/,
+        replacement: resolve(__dirname, "../shared/$1"),
+      },
+    ],
   },
   worker: {
     format: "es",

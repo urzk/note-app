@@ -8,6 +8,10 @@
     "module": "ESNext",
     "types": ["vite/client"],
     "skipLibCheck": true,
+    "paths": {
+      "src/*": ["src/*"],
+      "@shared/*": ["../shared/*"]
+    },
 
     /* Bundler mode */
     "moduleResolution": "bundler",

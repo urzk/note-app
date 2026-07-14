@@ -21,3 +21,7 @@
 .preview-prose {
   @apply max-w-none prose dark:prose-invert prose-zinc;
 }
+
+pre {
+  white-space: pre-wrap;
+}
