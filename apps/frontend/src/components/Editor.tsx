@@ -1,48 +1,54 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useEffect } from "react";
 
 import { TextAreaCommandOrchestrator, getCommands } from "@uiw/react-md-editor";
 
 import { MdPreview } from "./MdPreview";
 import { EditorTextArea } from "./EditorTextArea";
 import { MdToolbar } from "./MdToolbar";
-import { ViewToolbar } from "./ViewToolbar";
 
-const flexDirections = [
-  "flex-row",
-  "flex-col-reverse",
-  "flex-row-reverse",
-  "flex-col",
-];
+import { useNoteValue } from "../hooks/useNoteValue";
+import { useAtomValue } from "jotai";
+import { selectedNoteIdAtom } from "src/jotai/atoms";
+import { editorViewStateAtom } from "src/jotai/atoms";
+
+import { mutate } from "swr";
+import type { Response } from "../types/mdToHastSession";
+import { md2hast } from "../utils/md2hast";
 
 export const Editor = () => {
-  const [ratio, setRatio] = useState<number>(6); // 0 ~ 12
-  const maxRatio = 12;
-  const hasMdPreview = ratio !== 0;
+  const editorViewState = useAtomValue(editorViewStateAtom);
 
-  const [position, setPosition] = useState<number>(0); // 0 ~ 3
+  const selectedNoteId = useAtomValue(selectedNoteIdAtom);
+  const note = useNoteValue(selectedNoteId);
 
   const commands = useMemo(() => getCommands(), []);
   const orchestratorRef = useRef<null | TextAreaCommandOrchestrator>(null);
+
+  useEffect(() => {
+    const parse = async () => {
+      const { sessionId, hast } = await md2hast(note?.content ?? "");
+      mutate<Response>("note-hast-cache", (current) =>
+        !current || current.sessionId < sessionId
+          ? { sessionId, hast }
+          : current,
+      );
+    };
+    parse();
+  }, [note]);
 
   return (
     <div className="flex flex-col flex-1">
       <div className="border-b border-zinc-800 flex justify-between">
         <MdToolbar commands={commands} orchestratorRef={orchestratorRef} />
-        <ViewToolbar setRatio={setRatio} setPosition={setPosition} />
       </div>
-      <div
-        className={
-          "flex w-full h-screen overflow-auto " + flexDirections[position % 4]
-        }
-      >
-        <EditorTextArea
-          hasMdPreview
-          position={position}
-          ratio={maxRatio - ratio}
-          commands={commands}
-          orchestratorRef={orchestratorRef}
-        />
-        {hasMdPreview && <MdPreview ratio={ratio} />}
+      <div className={"flex w-full h-screen overflow-auto"}>
+        {editorViewState === "editor" && (
+          <EditorTextArea
+            commands={commands}
+            orchestratorRef={orchestratorRef}
+          />
+        )}
+        {editorViewState === "preview" && <MdPreview />}
       </div>
     </div>
   );

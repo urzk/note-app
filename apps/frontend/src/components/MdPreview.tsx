@@ -7,19 +7,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 
 import type { Response } from "../types/mdToHastSession";
-import { flexRatio } from "src/utils/flexRatio";
+
+import { useSetAtom } from "jotai";
+import { editorViewStateAtom } from "src/jotai/atoms";
 
 const compiler = unified().use(rehypeReact, production);
 
-export const MdPreview = ({ ratio }: { ratio: number }) => {
-  const wrapperClassName = flexRatio(ratio) + " view-wrapper";
+export const MdPreview = () => {
   const { data } = useSWR<Response>("note-hast-cache", null);
+
+  const setEditorViewState = useSetAtom(editorViewStateAtom);
+
   return (
-    <div className={wrapperClassName}>
+    <div className="flex-1 view-wrapper">
       <div className="p-4 preview-prose view">
         {data && compiler.stringify(data.hast)}
       </div>
-      <div className="absolute top-0 right-0 opacity-75">
+      <div
+        className="absolute top-0 right-0 opacity-75"
+        onClick={() => setEditorViewState("editor")}
+      >
         <FontAwesomeIcon icon={faEye} />
       </div>
     </div>

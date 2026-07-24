@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import type { KeyboardEvent, RefObject, SyntheticEvent } from "react";
-import { mutate } from "swr";
 import { useAtomValue, useSetAtom } from "jotai";
 import { selectedNoteIdAtom } from "src/jotai/atoms";
 import { textSelectionLengthAtom } from "src/jotai/atoms";
+import { editorViewStateAtom } from "src/jotai/atoms";
 
 import {
   handleKeyDown,
@@ -14,30 +14,18 @@ import type { ICommand } from "@uiw/react-md-editor";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 
-import type { Response } from "../types/mdToHastSession";
 import { useNote } from "../hooks/useNote";
 import { getTitle } from "../utils/getTitle";
-import { md2hast } from "../utils/md2hast";
-
-import { flexRatio } from "src/utils/flexRatio";
 
 import "katex/dist/katex.min.css";
 import "prism-theme-github/themes/prism-theme-github-copilot.css";
 
-const borderDirections = ["border-r", "border-t", "border-l", "border-b"];
-
 export const EditorTextArea = ({
-  hasMdPreview,
   commands,
   orchestratorRef,
-  position,
-  ratio,
 }: {
-  hasMdPreview: boolean;
   commands: ICommand<string>[];
   orchestratorRef: RefObject<null | TextAreaCommandOrchestrator>;
-  position: number;
-  ratio: number;
 }) => {
   const selectedNoteId = useAtomValue(selectedNoteIdAtom);
   const { note, setNote } = useNote(selectedNoteId);
@@ -92,28 +80,12 @@ export const EditorTextArea = ({
     updateSelectionLength(textareaRef.current!);
   });
 
-  useEffect(() => {
-    const parse = async () => {
-      const { sessionId, hast } = await md2hast(note?.content ?? "");
-      mutate<Response>("note-hast-cache", (current) =>
-        !current || current.sessionId < sessionId
-          ? { sessionId, hast }
-          : current,
-      );
-    };
-    if (hasMdPreview) parse();
-  }, [note, hasMdPreview]);
-
   const displayedSelectionLength = useAtomValue(textSelectionLengthAtom);
 
-  let wrapperClassName = flexRatio(ratio) + " view-wrapper";
-  if (hasMdPreview)
-    wrapperClassName = wrapperClassName + " " + borderDirections[position % 4];
-
-  if (ratio == 0) return <></>;
+  const setEditorViewState = useSetAtom(editorViewStateAtom);
 
   return (
-    <div className={wrapperClassName} ref={wrapperRef}>
+    <div className="flex-1 view-wrapper" ref={wrapperRef}>
       <textarea
         className="p-4 view min-w-0 resize-none outline-0 disabled:text-zinc-400"
         style={{ paddingBottom: `${paddingBottom}px` }}
@@ -138,7 +110,7 @@ export const EditorTextArea = ({
       />
       <div
         className="absolute top-0 right-0 opacity-75"
-        onClick={() => textareaRef.current?.focus()}
+        onClick={() => setEditorViewState("preview")}
       >
         <FontAwesomeIcon icon={faPen} />
       </div>
