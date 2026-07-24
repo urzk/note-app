@@ -63,8 +63,6 @@ export const EditorTextArea = ({
     return () => resizeObserver.disconnect();
   }, []);
 
-  const titleCacheRef = useRef<{ md: string; title: string } | null>(null);
-
   const updateSelectionLength = (target: HTMLTextAreaElement) => {
     const start = target.selectionStart ?? 0;
     const end = target.selectionEnd ?? 0;
@@ -97,7 +95,7 @@ export const EditorTextArea = ({
           if (note) {
             setNote({
               id: note.id,
-              title: getTitle(content, titleCacheRef),
+              title: getTitle(content),
               content,
               updatedAt: Date.now(),
               isDeleted: false,
