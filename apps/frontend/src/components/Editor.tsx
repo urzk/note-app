@@ -3,6 +3,7 @@ import { useMemo, useRef, useEffect } from "react";
 import { TextAreaCommandOrchestrator, getCommands } from "@uiw/react-md-editor";
 
 import { MdPreview } from "./MdPreview";
+import { CrepeEditorWrapper } from "./CrepeEditorWrapper";
 import { EditorTextArea } from "./EditorTextArea";
 import { MdToolbar } from "./MdToolbar";
 
@@ -48,7 +49,7 @@ export const Editor = () => {
             orchestratorRef={orchestratorRef}
           />
         )}
-        {editorViewState === "preview" && <MdPreview />}
+        {editorViewState === "preview" && <CrepeEditorWrapper />}
       </div>
     </div>
   );
