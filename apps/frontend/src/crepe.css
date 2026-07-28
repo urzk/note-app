@@ -1,0 +1,97 @@
+.milkdown {
+  --crepe-color-background: inherit;
+
+  .ProseMirror {
+    --crepe-font-default: sans-serif;
+    --crepe-font-title: sans-serif;
+    padding: 32px 96px;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p {
+      line-height: 1.5;
+      padding: 0;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: var(--crepe-font-title);
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-top: 2rem;
+    }
+
+    h2 {
+      font-size: 1.782rem;
+      margin-top: 1.782rem;
+    }
+
+    h3 {
+      font-size: 1.587rem;
+      margin-top: 1.587rem;
+    }
+
+    h4 {
+      font-size: 1.414rem;
+      margin-top: 1.414rem;
+    }
+
+    h5 {
+      font-size: 1.26rem;
+      margin-top: 1.26rem;
+    }
+
+    h6 {
+      font-size: 1.122rem;
+      margin-top: 1.122rem;
+    }
+
+    p {
+      font-size: 1rem;
+      margin-top: 1rem;
+    }
+
+    hr,
+    ul {
+      margin-top: 1rem;
+    }
+
+    li p {
+      margin: 4px 0;
+    }
+
+    blockquote {
+      margin: 1rem 0 0;
+
+      &::before {
+        top: 0;
+        bottom: 0;
+      }
+    }
+  }
+
+  .milkdown-code-block,
+  .milkdown-image-block,
+  .milkdown-table-block {
+    margin: 1rem 0 0;
+  }
+
+  .milkdown-code-block {
+    border-radius: 8px;
+  }
+
+  .milkdown-block-handle {
+    gap: 0px;
+  }
+}
