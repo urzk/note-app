@@ -70,4 +70,7 @@
       margin: 4px 0;
     }
   }
+  .milkdown-block-handle {
+    gap: 0px;
+  }
 }
