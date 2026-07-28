@@ -31,12 +31,12 @@ const cjkFriendlyGfmStrikethroughPlugin = $remark(
   "cjk-friendly-gfm-strikethrough",
   () => remarkCjkFriendlyGfmStrikethrough,
 );
-const breaksPlugin = $remark("breaks", () => remarkBreaks);
+const breaksPlugin = $remark("breaks", () => remarkBreaks); // 現状効かない TODO: fix or delete
 
 const dmp = new diffMatchPatch();
 
 export const CrepeEditor = () => {
-  const loading = useRef<boolean>(true);
+  const loading = useRef<boolean>(true); // noteを開いただけで更新されてしまうのを防ぐためのフラグ。noteがロードされた後にfocusされたらfalseにする。
   const editorRef = useRef<Crepe | null>(null);
 
   const selectedNoteId = useAtomValue(selectedNoteIdAtom);
@@ -88,6 +88,7 @@ export const CrepeEditor = () => {
     };
   }, [selectedNoteId]);
 
+  // editor内で.milkdownの外（小さなnoteの下部の余白）をクリック時に、末尾にカーソルが来るようにfocus()する。
   const handleClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target !== e.currentTarget) return;
 
