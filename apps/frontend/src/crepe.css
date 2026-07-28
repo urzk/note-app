@@ -62,6 +62,7 @@
       margin-top: 1rem;
     }
 
+    hr,
     ul {
       margin-top: 1rem;
     }
@@ -69,7 +70,27 @@
     li p {
       margin: 4px 0;
     }
+
+    blockquote {
+      margin: 1rem 0 0;
+
+      &::before {
+        top: 0;
+        bottom: 0;
+      }
+    }
   }
+
+  .milkdown-code-block,
+  .milkdown-image-block,
+  .milkdown-table-block {
+    margin: 1rem 0 0;
+  }
+
+  .milkdown-code-block {
+    border-radius: 8px;
+  }
+
   .milkdown-block-handle {
     gap: 0px;
   }
