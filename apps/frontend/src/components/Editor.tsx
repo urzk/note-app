@@ -49,7 +49,7 @@ export const Editor = () => {
             orchestratorRef={orchestratorRef}
           />
         )}
-        {editorViewState === "preview" && <CrepeEditorWrapper />}
+        {editorViewState === "milkdown" && <CrepeEditorWrapper />}
       </div>
     </div>
   );
