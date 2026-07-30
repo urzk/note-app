@@ -22,9 +22,9 @@ import { TextSelection } from "@milkdown/prose/state";
 
 import diffMatchPatch from "diff-match-patch";
 
-import * as Y from "yjs";
-import { WebrtcProvider } from "y-webrtc";
-import { collab, collabServiceCtx } from "@milkdown/plugin-collab";
+// import * as Y from "yjs";
+// import { WebrtcProvider } from "y-webrtc";
+// import { collab, collabServiceCtx } from "@milkdown/plugin-collab";
 
 const cjkFriendlyPlugin = $remark("cjk-friendly", () => remarkCjkFriendly);
 const cjkFriendlyGfmStrikethroughPlugin = $remark(
@@ -70,7 +70,7 @@ export const CrepeEditor = () => {
             });
           }
         });
-        ctx.get(listenerCtx).focus((ctx) => {
+        ctx.get(listenerCtx).focus((/* ctx */) => {
           console.log("Editor focused");
           loading.current = false;
         });
