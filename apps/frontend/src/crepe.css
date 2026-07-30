@@ -4,7 +4,7 @@
   .ProseMirror {
     --crepe-font-default: sans-serif;
     --crepe-font-title: sans-serif;
-    padding: 32px 96px;
+    padding: 32px 96px 40dvh;
 
     h1,
     h2,

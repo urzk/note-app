@@ -108,7 +108,7 @@ export const EditorTextArea = ({
       />
       <div
         className="absolute top-0 right-0 opacity-75"
-        onClick={() => setEditorViewState("preview")}
+        onClick={() => setEditorViewState("milkdown")}
       >
         <FontAwesomeIcon icon={faPen} />
       </div>
