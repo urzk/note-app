@@ -6,6 +6,7 @@ import { TextAreaCommandOrchestrator, getCommands } from "@uiw/react-md-editor";
 import { CrepeEditorWrapper } from "./CrepeEditorWrapper";
 import { EditorTextArea } from "./EditorTextArea";
 import { MdToolbar } from "./MdToolbar";
+import { CodeMirrorWrapper } from "./CodeMirrorWrapper";
 
 import { useNoteValue } from "../hooks/useNoteValue";
 import { useAtomValue } from "jotai";
@@ -43,12 +44,7 @@ export const Editor = () => {
         <MdToolbar commands={commands} orchestratorRef={orchestratorRef} />
       </div>
       <div className={"flex w-full h-screen overflow-auto"}>
-        {editorViewState === "editor" && (
-          <EditorTextArea
-            commands={commands}
-            orchestratorRef={orchestratorRef}
-          />
-        )}
+        {editorViewState === "editor" && <CodeMirrorWrapper />}
         {editorViewState === "milkdown" && <CrepeEditorWrapper />}
       </div>
     </div>
