@@ -2,7 +2,7 @@ import "./style.css";
 
 import { SWRConfig } from "swr";
 
-import { Editor } from "./components/Editor";
+import { EditorWrapper } from "./components/EditorWrapper";
 import { NoteList } from "./components/NoteList";
 import { SidebarHeader } from "./components/SidebarHeader";
 
@@ -14,7 +14,7 @@ const App = () => {
           <SidebarHeader />
           <NoteList />
         </div>
-        <Editor />
+        <EditorWrapper />
       </div>
     </SWRConfig>
   );
