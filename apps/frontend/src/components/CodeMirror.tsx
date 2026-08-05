@@ -7,10 +7,14 @@ import { EditorView } from "@codemirror/view";
 import { HighlightStyle, syntaxHighlighting } from "@codemirror/language";
 import { tags } from "@lezer/highlight";
 
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { selectedNoteIdAtom } from "src/jotai/atoms";
 import { useNote } from "../hooks/useNote";
 import { getTitle } from "../utils/getTitle";
+import {
+  editorTextLengthAtom,
+  editorTextSelectionLengthAtom,
+} from "src/jotai/atoms";
 
 // Markdown記法のハイライト設定
 const highlightStyle = HighlightStyle.define([
@@ -44,13 +48,20 @@ const theme = EditorView.theme({
   ".cm-gutters": {
     backgroundColor: "inherit",
     border: "none",
+    // flexDirection: "row-reverse",
   },
   ".cm-activeLineGutter": {
-    backgroundColor: "#222",
+    backgroundColor: "#fff1",
   },
   ".cm-activeLine": {
-    backgroundColor: "#222",
+    backgroundColor: "#fff1",
   },
+  ".cm-lineNumbers .cm-gutterElement": {
+    padding: "0 4px",
+  },
+  ".cm-cursor, .cm-dropCursor": { borderLeftColor: "#ccc" },
+  "&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection":
+    { backgroundColor: "#22262a" },
 });
 
 export const CodeMirror = () => {
@@ -58,12 +69,22 @@ export const CodeMirror = () => {
 
   const selectedNoteId = useAtomValue(selectedNoteIdAtom);
   const { note, setNote } = useNote(selectedNoteId);
+  const setTextSelectionLength = useSetAtom(editorTextSelectionLengthAtom);
+  const setTextLength = useSetAtom(editorTextLengthAtom);
 
   useEffect(() => {
     if (!editorRef.current) return;
 
     const updateListener = EditorView.updateListener.of((update) => {
+      if (update.selectionSet) {
+        setTextSelectionLength(
+          update.state.selection.ranges[0].to -
+            update.state.selection.ranges[0].from,
+        );
+      }
       if (update.docChanged && selectedNoteId) {
+        setTextLength(update.state.doc.length);
+
         const text = update.state.doc.toString();
         setNote({
           id: selectedNoteId,
@@ -74,6 +95,8 @@ export const CodeMirror = () => {
         });
       }
     });
+
+    setTextLength(note?.content.length ?? 0);
 
     const state = EditorState.create({
       doc: note?.content || "",
@@ -92,6 +115,8 @@ export const CodeMirror = () => {
     });
     return () => {
       view.destroy();
+      setTextSelectionLength(0);
+      setTextLength(0);
     };
   }, [selectedNoteId]);
   return <div id="editor" ref={editorRef} className="view"></div>;

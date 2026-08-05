@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import type { KeyboardEvent, RefObject, SyntheticEvent } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
 import { selectedNoteIdAtom } from "src/jotai/atoms";
-import { textSelectionLengthAtom } from "src/jotai/atoms";
+import { editorTextSelectionLengthAtom } from "src/jotai/atoms";
 import { editorViewStateAtom } from "src/jotai/atoms";
 
 import {
@@ -29,7 +29,7 @@ export const EditorTextArea = ({
 }) => {
   const selectedNoteId = useAtomValue(selectedNoteIdAtom);
   const { note, setNote } = useNote(selectedNoteId);
-  const setTextSelectionLength = useSetAtom(textSelectionLengthAtom);
+  const setTextSelectionLength = useSetAtom(editorTextSelectionLengthAtom);
   const [paddingBottom, setPaddingBottom] = useState<number>(0);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
