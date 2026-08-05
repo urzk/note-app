@@ -12,6 +12,7 @@ import { CodeMirror } from "./CodeMirror";
 
 export const CodeMirrorWrapper = () => {
   const setEditorViewState = useSetAtom(editorViewStateAtom);
+
   const textSelectionLength = useAtomValue(editorTextSelectionLengthAtom);
   const textLength = useAtomValue(editorTextLengthAtom);
 

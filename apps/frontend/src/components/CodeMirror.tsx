@@ -69,8 +69,9 @@ export const CodeMirror = () => {
 
   const selectedNoteId = useAtomValue(selectedNoteIdAtom);
   const { note, setNote } = useNote(selectedNoteId);
-  const setTextSelectionLength = useSetAtom(editorTextSelectionLengthAtom);
+
   const setTextLength = useSetAtom(editorTextLengthAtom);
+  const setTextSelectionLength = useSetAtom(editorTextSelectionLengthAtom);
 
   useLayoutEffect(() => {
     if (!editorRef.current) return;
