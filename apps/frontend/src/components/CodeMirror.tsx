@@ -54,7 +54,7 @@ const theme = EditorView.theme({
     backgroundColor: "#fff1",
   },
   ".cm-activeLine": {
-    backgroundColor: "#fff1",
+    backgroundColor: "inherit",
   },
   ".cm-lineNumbers .cm-gutterElement": {
     padding: "0 4px",
