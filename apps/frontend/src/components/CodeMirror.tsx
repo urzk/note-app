@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 
 import { basicSetup } from "codemirror";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
@@ -72,7 +72,7 @@ export const CodeMirror = () => {
   const setTextSelectionLength = useSetAtom(editorTextSelectionLengthAtom);
   const setTextLength = useSetAtom(editorTextLengthAtom);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!editorRef.current) return;
 
     const updateListener = EditorView.updateListener.of((update) => {

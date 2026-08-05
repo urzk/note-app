@@ -2,7 +2,7 @@ import "@milkdown/crepe/theme/common/style.css";
 import "@milkdown/crepe/theme/nord-dark.css";
 import "../crepe.css";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useLayoutEffect, useRef } from "react";
 
 import { Crepe } from "@milkdown/crepe";
 
@@ -42,7 +42,7 @@ export const CrepeEditor = () => {
   const selectedNoteId = useAtomValue(selectedNoteIdAtom);
   const { note, setNote } = useNote(selectedNoteId);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     console.assert(!note || note.id === selectedNoteId, "Note ID mismatch");
     const crepe = new Crepe({
       root: "#editor",
