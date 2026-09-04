@@ -26,9 +26,10 @@ import { TextSelection } from "@milkdown/prose/state";
 
 // import diffMatchPatch from "diff-match-patch";
 
-// import * as Y from "yjs";
-// import { WebrtcProvider } from "y-webrtc";
-// import { collab, collabServiceCtx } from "@milkdown/plugin-collab";
+import * as Y from "yjs";
+import { WebrtcProvider } from "y-webrtc";
+import { collab, collabServiceCtx } from "@milkdown/plugin-collab";
+import { IndexeddbPersistence } from "y-indexeddb";
 
 const cjkFriendlyPlugin = $remark("cjk-friendly", () => remarkCjkFriendly);
 const cjkFriendlyGfmStrikethroughPlugin = $remark(
@@ -36,8 +37,6 @@ const cjkFriendlyGfmStrikethroughPlugin = $remark(
   () => remarkCjkFriendlyGfmStrikethrough,
 );
 // const breaksPlugin = $remark("breaks", () => remarkBreaks); // 現状効かない TODO: fix or delete
-
-// const dmp = new diffMatchPatch();
 
 export const CrepeEditor = () => {
   const isLoadingRef = useRef<boolean>(true); // noteを開いただけで更新されてしまうのを防ぐためのフラグ。noteがロードされた後にfocusされたらfalseにする。
@@ -53,11 +52,11 @@ export const CrepeEditor = () => {
     console.assert(!note || note.id === selectedNoteId, "Note ID mismatch");
     const crepe = new Crepe({
       root: "#editor",
-      defaultValue: note?.content || "",
     });
 
     crepe.editor
       // .use(breaksPlugin)
+      .use(collab)
       .use(cjkFriendlyPlugin)
       .use(cjkFriendlyGfmStrikethroughPlugin)
       .config((ctx) => {
@@ -88,17 +87,44 @@ export const CrepeEditor = () => {
       })
       .use(listener);
 
+    const doc = new Y.Doc();
+    const idbPersistence = new IndexeddbPersistence(
+      "note-" + selectedNoteId,
+      doc,
+    );
+    const wsProvider = new WebrtcProvider("note-" + selectedNoteId, doc);
+    doc.on("update", (update) => {
+      console.log(update);
+    });
+
     crepe.create().then(() => {
       editorRef.current = crepe;
 
       const view = crepe.editor.ctx.get(editorViewCtx);
       setTextLength(view.state.doc.content.size);
+
+      crepe.editor.action((ctx) => {
+        const collabService = ctx.get(collabServiceCtx);
+        collabService.bindDoc(doc).setAwareness(wsProvider.awareness);
+
+        // for migration from old version
+        if (note?.content !== undefined) {
+          collabService.applyTemplate(note.content);
+        }
+
+        collabService.connect();
+      });
     });
 
     return () => {
       editorRef.current = null;
       isLoadingRef.current = true;
+
+      wsProvider.destroy();
+      idbPersistence.destroy();
+      doc.destroy();
       crepe.destroy();
+
       setTextSelectionLength(0);
       setTextLength(0);
     };
